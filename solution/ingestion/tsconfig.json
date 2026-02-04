@@ -12,19 +12,16 @@
     "rootDir": "./src",
     "baseUrl": "./src",
     "paths": {
+      "@root": ["./"],
       "@root/*": ["./*"],
       "@adapters": ["./adapters/index.ts"],
       "@adapters/*": ["./adapters/*"],
       "@agents": ["./agents/index.ts"],
       "@agents/*": ["./agents/*"],
-      "@config": ["./config/index.ts"],
-      "@config/*": ["./config/*"],
       "@models": ["./models/index.ts"],
       "@models/*": ["./models/*"],
       "@services": ["./services/index.ts"],
-      "@services/*": ["./services/*"],
-      "@state": ["./state/index.ts"],
-      "@state/*": ["./state/*"]
+      "@services/*": ["./services/*"]
     }
   },
   "include": ["src/**/*"],

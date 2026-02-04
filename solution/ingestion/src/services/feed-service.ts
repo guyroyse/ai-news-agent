@@ -1,6 +1,6 @@
 import Parser from 'rss-parser'
 import type { FeedItem } from '@models'
-import { config } from '@config'
+import { config } from '@root/config'
 import { articleExists } from './article-service.js'
 
 /* Fetch all feed items from the configured RSS feeds */

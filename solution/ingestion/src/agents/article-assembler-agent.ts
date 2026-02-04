@@ -1,4 +1,4 @@
-import type { ArticleState } from '@state'
+import type { ArticleState } from '@root/state'
 import type { Article } from '@models'
 
 export async function articleAssembler(state: ArticleState): Promise<Partial<ArticleState>> {

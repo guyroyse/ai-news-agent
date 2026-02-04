@@ -1,6 +1,6 @@
 import { ChatOpenAI } from '@langchain/openai'
 
-import { config } from '@config'
+import { config } from '@root/config'
 
 export function fetchLLM(): ChatOpenAI {
   return new ChatOpenAI({

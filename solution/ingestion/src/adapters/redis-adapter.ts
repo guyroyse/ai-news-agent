@@ -1,6 +1,6 @@
 import { createClient } from 'redis'
 
-import { config } from '@config'
+import { config } from '@root/config'
 
 let redis: ReturnType<typeof createClient> | null = null
 

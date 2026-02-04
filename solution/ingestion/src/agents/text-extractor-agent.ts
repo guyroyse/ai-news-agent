@@ -1,7 +1,7 @@
 import { convert } from 'html-to-text'
 import dedent from 'dedent'
 
-import type { ArticleState } from '@state'
+import type { ArticleState } from '@root/state'
 import { fetchLLM } from '@adapters'
 
 const llm = fetchLLM()

@@ -1,11 +1,10 @@
-import { encoding_for_model } from 'tiktoken'
 import dedent from 'dedent'
 
 import type { ArticleState } from '@root/state'
-import { fetchLLM } from '@adapters'
+import { fetchLLM, fetchTokenCounter } from '@adapters'
 
 const llm = fetchLLM()
-const encoding = encoding_for_model('gpt-4o-mini')
+const tokenCounter = fetchTokenCounter()
 
 export async function summarizer(state: ArticleState): Promise<Partial<ArticleState>> {
   /* Extract the content from the state */
@@ -26,8 +25,8 @@ export async function summarizer(state: ArticleState): Promise<Partial<ArticleSt
   const summary = response.content as string
 
   /* Log the token counts to show the reduction */
-  console.log(`-> Tokens in content: ${encoding.encode(content).length}`)
-  console.log(`-> Tokens in summary: ${encoding.encode(summary).length}`)
+  console.log(`-> Tokens in content: ${tokenCounter.encode(content).length}`)
+  console.log(`-> Tokens in summary: ${tokenCounter.encode(summary).length}`)
 
   console.log(`-> Summary generation complete`)
   console.log()

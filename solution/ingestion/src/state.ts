@@ -1,23 +1,28 @@
 import { Annotation } from '@langchain/langgraph'
-import type { Article, FeedItem } from '@models'
+import type { Article, FeedItem } from '@services'
 
 export const ArticleAnnotation = Annotation.Root({
-  feedItem: Annotation<FeedItem | null>({
-    default: () => null,
-    reducer: (_prev, next) => next
+  feedItem: Annotation<FeedItem>(),
+  content: Annotation<string>(),
+  summary: Annotation<string>(),
+  topics: Annotation<string[]>({
+    default: () => [],
+    reducer: (prev, next) => [...prev, ...next]
   }),
-  content: Annotation<string | null>({
-    default: () => null,
-    reducer: (_prev, next) => next
+  people: Annotation<string[]>({
+    default: () => [],
+    reducer: (prev, next) => [...prev, ...next]
   }),
-  summary: Annotation<string | null>({
-    default: () => null,
-    reducer: (_prev, next) => next
+  organizations: Annotation<string[]>({
+    default: () => [],
+    reducer: (prev, next) => [...prev, ...next]
   }),
-  article: Annotation<Article | null>({
-    default: () => null,
-    reducer: (_prev, next) => next
-  })
+  locations: Annotation<string[]>({
+    default: () => [],
+    reducer: (prev, next) => [...prev, ...next]
+  }),
+  embedding: Annotation<number[]>(),
+  article: Annotation<Article>()
 })
 
 export type ArticleState = typeof ArticleAnnotation.State

@@ -1,7 +1,31 @@
 import { createHash } from 'crypto'
 
-import type { Article } from '@models'
 import { fetchRedisConnection } from '@adapters'
+
+export type Source = {
+  title: string
+  link: string
+}
+
+export type Topics = string[]
+
+export type NamedEntities = {
+  people: string[]
+  organizations: string[]
+  locations: string[]
+}
+
+export type Article = {
+  title: string
+  link: string
+  publicationDate: number
+  content: string
+  summary: string
+  source: Source
+  topics: Topics
+  namedEntities: NamedEntities
+  embedding: number[]
+}
 
 export async function articleExists(link: string): Promise<boolean> {
   const redis = await fetchRedisConnection()

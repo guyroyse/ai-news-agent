@@ -1,7 +1,16 @@
 import Parser from 'rss-parser'
-import type { FeedItem } from '@models'
 import { config } from '@root/config'
 import { articleExists } from './article-service.js'
+
+export type FeedItem = {
+  feedTitle: string
+  feedLink: string
+  title: string
+  content: string
+  pubDate: string
+  link: string
+  html: string | undefined
+}
 
 /* Fetch all feed items from the configured RSS feeds */
 const feeds = config.rssFeeds
@@ -75,7 +84,7 @@ async function fetchFeedItem(item: Parser.Item): Promise<Partial<FeedItem> | nul
     content: item.content ?? item.contentSnippet ?? (item as any).description ?? '',
     pubDate: item.pubDate ?? item.isoDate ?? new Date().toISOString(),
     link: link,
-    html: html ?? ''
+    html: html
   }
 }
 

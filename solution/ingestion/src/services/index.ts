@@ -1,2 +1,2 @@
-export { fetchFeeds } from './feed-service.js'
-export { saveArticle } from './article-service.js'
+export { fetchFeeds, type FeedItem } from './feed-service.js'
+export { saveArticle, type Article, type Source as ArticleSource, type NamedEntities } from './article-service.js'

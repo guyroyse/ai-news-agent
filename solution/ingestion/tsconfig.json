@@ -18,8 +18,6 @@
       "@adapters/*": ["./adapters/*"],
       "@agents": ["./agents/index.ts"],
       "@agents/*": ["./agents/*"],
-      "@models": ["./models/index.ts"],
-      "@models/*": ["./models/*"],
       "@services": ["./services/index.ts"],
       "@services/*": ["./services/*"]
     }

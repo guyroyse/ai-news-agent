@@ -14,8 +14,9 @@ export async function fetchFeeds(): Promise<FeedItem[]> {
   const allItems: FeedItem[] = []
 
   /* Loop over the feeds and fetch them */
-  for (const feedUrl of feeds) {
-    const items = await fetchFeed(feedUrl)
+  for (const feedLink of feeds) {
+    console.log(`Fetching feed: ${feedLink}`)
+    const items = await fetchFeed(feedLink)
     allItems.push(...items)
   }
 
@@ -23,16 +24,16 @@ export async function fetchFeeds(): Promise<FeedItem[]> {
 }
 
 /* Fetch a single feed */
-async function fetchFeed(feedUrl: string): Promise<FeedItem[]> {
+async function fetchFeed(feedLink: string): Promise<FeedItem[]> {
   try {
     /* Fetch the feed */
-    console.log(`Fetching feed: ${feedUrl}`)
-    const feed = await parser.parseURL(feedUrl)
-    console.log(`  Fetched ${feed.items.length} items`)
+    const feed = await parser.parseURL(feedLink)
 
-    /* Get the feed title and link */
+    /* Make sure the feed titlt has a value */
     const feedTitle = feed.title ?? 'Untitled'
-    const feedLink = feedUrl
+    const feedItemCount = feed.items.length
+    console.log(`-> Fetched ${feedItemCount} items for ${feedTitle}`)
+    console.log()
 
     /* Fetch all items from the feed */
     const items = await fetchFeedItems(feed.items)
@@ -42,7 +43,8 @@ async function fetchFeed(feedUrl: string): Promise<FeedItem[]> {
 
     return enrichedItems
   } catch (error) {
-    console.error(`Error fetching ${feedUrl}:`, error)
+    console.error(`⛔️ Error fetching ${feedLink}:`, error)
+    console.log()
     return []
   }
 }

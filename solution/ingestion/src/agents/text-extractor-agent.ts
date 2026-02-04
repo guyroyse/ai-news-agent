@@ -1,25 +1,44 @@
 import { convert } from 'html-to-text'
+import { encoding_for_model } from 'tiktoken'
 import dedent from 'dedent'
 
 import type { ArticleState } from '@root/state'
 import { fetchLLM } from '@adapters'
 
 const llm = fetchLLM()
+const encoding = encoding_for_model('gpt-4o-mini')
 
 export async function textExtractor(state: ArticleState): Promise<Partial<ArticleState>> {
+  /* Extract the feed item from the state */
   const { feedItem } = state
 
+  /* Make sure we have a feed item */
   if (!feedItem) throw new Error('No feed item to process')
 
+  console.log(`[Text Extractor] Processing: ${feedItem.title}`)
+
+  /* If we don't have HTML, use the RSS content. Nothing to do here. */
   if (!feedItem.html) {
-    console.log(`No HTML available for: ${feedItem.title}`)
+    console.log(`-> No HTML available, using RSS content`)
+    console.log()
     return { content: feedItem.content }
   }
 
+  /* Extract the text from the HTML */
   const text = extractTextFromHtml(feedItem.html)
+
+  /* Build the prompt, send it to the LLM, and get its response */
   const prompt = buildPrompt(text)
   const response = await llm.invoke(prompt)
   const content = response.content as string
+
+  /* Log the token counts to show the massive savings */
+  console.log(`-> Tokens in HTML: ${encoding.encode(feedItem.html).length}`)
+  console.log(`-> Tokens in text: ${encoding.encode(text).length}`)
+  console.log(`-> Tokens in content: ${encoding.encode(content).length}`)
+
+  console.log(`-> Text extraction complete`)
+  console.log()
 
   return { content }
 }

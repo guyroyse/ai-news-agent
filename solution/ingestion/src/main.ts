@@ -5,14 +5,25 @@ import { articleWorkflow } from './workflow.js'
 /* Fetch all feed items from RSS feeds */
 const feedItems = await fetchFeeds()
 console.log(`Fetched ${feedItems.length} feed items to process`)
+console.log()
 
 /* Process all feed items through the workflow and save to Redis */
 for (const feedItem of feedItems) {
+  console.log(`Processing article "${feedItem.title}"`)
+  console.log()
+
+  /* Process the feed item through the workflow */
   const result = await articleWorkflow.invoke({ feedItem })
-  if (result.article) await saveArticle(result.article)
+
+  /* Save the article to Redis if there is one */
+  if (result.article) {
+    await saveArticle(result.article)
+    console.log('Saved article to Redis')
+    console.log()
+  }
 }
 
-console.log(`Processed ${feedItems.length} articles`)
+console.log(`Completed processing articles`)
 
 /* Close Redis connection */
 await cleanupRedisConnection()

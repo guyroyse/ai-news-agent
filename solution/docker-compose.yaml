@@ -1,0 +1,37 @@
+name: news-agent
+
+services:
+  redis:
+    image: redis:latest
+    container_name: news-agent-redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - ./redis:/data
+
+  agent-memory-server:
+    image: redislabs/agent-memory-server:latest
+    container_name: news-agent-ams
+    ports:
+      - '8000:8000'
+    env_file:
+      - .env
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - AUTH_MODE=disabled
+      - LOG_LEVEL=DEBUG
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    depends_on:
+      - redis
+
+  news-agent-ingestion:
+    build: ./ingestion
+    container_name: news-agent-ingestion
+    env_file:
+      - .env
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    depends_on:
+      - redis
+

@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ES2022",
+    "lib": ["ES2022"],
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "resolveJsonModule": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "baseUrl": "./src",
+    "paths": {
+      "@root/*": ["./*"],
+      "@adapters": ["./adapters/index.ts"],
+      "@adapters/*": ["./adapters/*"],
+      "@agents": ["./agents/index.ts"],
+      "@agents/*": ["./agents/*"],
+      "@config": ["./config/index.ts"],
+      "@config/*": ["./config/*"],
+      "@models": ["./models/index.ts"],
+      "@models/*": ["./models/*"],
+      "@services": ["./services/index.ts"],
+      "@services/*": ["./services/*"],
+      "@state": ["./state/index.ts"],
+      "@state/*": ["./state/*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

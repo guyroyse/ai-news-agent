@@ -1,0 +1,33 @@
+import cors from 'cors'
+import express from 'express'
+
+import { config } from './config.js'
+import { ingest } from '@ingestion'
+
+const port = config.port
+
+const app = express()
+app.use(cors())
+app.use(express.json())
+
+app.get('/version', (_req, res) => {
+  res.json({
+    name: 'News Agent API',
+    version: '1.0.0',
+    node: process.version
+  })
+})
+
+app.post('/ingest', async (req, res) => {
+  try {
+    const limit = Number(req.query.limit)
+    const result = Number.isNaN(limit) ? await ingest() : await ingest(limit)
+    res.json({ success: true, ...result })
+  } catch (error) {
+    res.status(500).json({ success: false, error: String(error) })
+  }
+})
+
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`)
+})

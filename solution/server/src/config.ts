@@ -1,5 +1,3 @@
-import 'dotenv/config'
-
 class Config {
   get rssFeeds(): string[] {
     return [
@@ -15,6 +13,10 @@ class Config {
 
   get openAiApiKey(): string {
     return process.env.OPENAI_API_KEY || ''
+  }
+
+  get port(): number {
+    return parseInt(process.env.PORT || '3000', 10)
   }
 }
 

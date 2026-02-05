@@ -1,0 +1,21 @@
+{
+  "name": "@news-agent/root",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "server",
+    "web"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "dev": "concurrently -n server,web -c blue,green 'npm run dev:server' 'npm run dev:web'",
+    "dev:server": "npm run dev -w @news-agent/server",
+    "dev:web": "npm run dev -w @news-agent/web",
+    "start": "concurrently -n server,web -c blue,green 'npm run start:server' 'npm run start:web'",
+    "start:server": "npm start -w @news-agent/server",
+    "start:web": "npm start -w @news-agent/web"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

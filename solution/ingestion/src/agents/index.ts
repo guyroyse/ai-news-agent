@@ -1,6 +1,0 @@
-export { textExtractor } from './text-extractor-agent.js'
-export { summarizer } from './summarizer-agent.js'
-export { topicClassifier } from './topic-classifier-agent.js'
-export { entityExtractor } from './entity-extractor-agent.js'
-export { embedder } from './embedder-agent.js'
-export { articleAssembler } from './article-assembler-agent.js'

@@ -1,7 +1,7 @@
 import { convert } from 'html-to-text'
 import dedent from 'dedent'
 
-import type { ArticleState } from '@root/state'
+import type { ArticleState } from '../state.js'
 import { fetchLLM, fetchTokenCounter } from '@adapters'
 import { log } from '@services'
 

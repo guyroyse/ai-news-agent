@@ -1,4 +1,4 @@
-import type { ArticleState } from '@root/state'
+import type { ArticleState } from '../state.js'
 import type { Article } from '@services'
 import { log } from '@services'
 

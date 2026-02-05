@@ -12,16 +12,10 @@
     "rootDir": "./src",
     "baseUrl": "./src",
     "paths": {
-      "@root": ["./"],
       "@root/*": ["./*"],
       "@adapters": ["./adapters/index.ts"],
-      "@adapters/*": ["./adapters/*"],
-      "@agents": ["./agents/index.ts"],
-      "@agents/*": ["./agents/*"],
       "@services": ["./services/index.ts"],
-      "@services/*": ["./services/*"],
-      "@utils": ["./utils/index.ts"],
-      "@utils/*": ["./utils/*"]
+      "@ingestion": ["./ingestion/index.ts"]
     }
   },
   "include": ["src/**/*"],

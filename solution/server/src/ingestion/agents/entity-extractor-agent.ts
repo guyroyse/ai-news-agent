@@ -1,7 +1,7 @@
 import dedent from 'dedent'
 import { z } from 'zod'
 
-import type { ArticleState } from '@root/state'
+import type { ArticleState } from '../state.js'
 import { fetchLLM } from '@adapters'
 import { log } from '@services'
 

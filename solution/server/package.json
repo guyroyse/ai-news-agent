@@ -1,7 +1,7 @@
 {
-  "name": "@news-agent/ingestion",
+  "name": "@news-agent/server",
   "version": "1.0.0",
-  "description": "News Agent ingestion workflow",
+  "description": "News Agent server",
   "author": "Guy Royse <guy@guy.dev>",
   "license": "MIT",
   "private": true,
@@ -9,18 +9,22 @@
     "node": ">=22.0.0"
   },
   "type": "module",
-  "main": "dist/main.js",
+  "main": "dist/server.js",
+  "exports": {
+    ".": "./dist/server.js"
+  },
   "scripts": {
-    "dev": "nodemon --exec tsx src/main.ts",
     "build": "rimraf dist && tsc && tsc-alias",
-    "start": "node dist/main.js"
+    "dev": "nodemon --exec tsx --env-file=../.env src/server.ts",
+    "start": "node --env-file=../.env dist/server.js"
   },
   "dependencies": {
     "@langchain/core": "^1.1.17",
     "@langchain/langgraph": "^1.1.2",
     "@langchain/openai": "^1.2.3",
+    "cors": "^2.8.6",
     "dedent": "^1.7.1",
-    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
     "html-to-text": "^9.0.5",
     "redis": "^5.10.0",
     "rss-parser": "^3.13.0",
@@ -28,7 +32,9 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/dedent": "^0.7.2",
+    "@types/express": "^5.0.6",
     "@types/html-to-text": "^9.0.4",
     "@types/node": "^25.0.8",
     "nodemon": "^3.1.11",

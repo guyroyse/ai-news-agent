@@ -3,6 +3,7 @@ import { z } from 'zod'
 
 import type { ArticleState } from '@root/state'
 import { fetchLLM } from '@adapters'
+import { log } from '@services'
 
 /* Schema for named entity extraction output */
 const namedEntitiesSchema = z.object({
@@ -18,7 +19,7 @@ export async function entityExtractor(state: ArticleState): Promise<Partial<Arti
   /* Extract the feed item and content from the state */
   const { feedItem, content } = state
 
-  console.log(`[Entity Extractor] Extracting named entities`)
+  log('Entity Extractor', 'Extracting named entities')
 
   /* Make sure we have the required data */
   if (!feedItem) throw new Error('No feed item to process')
@@ -29,11 +30,10 @@ export async function entityExtractor(state: ArticleState): Promise<Partial<Arti
   const namedEntities = await llm.invoke(prompt)
 
   /* Log the etracted entities */
-  console.log(`-> Extracted named entities:`)
-  console.log(`   People: ${namedEntities.people.join(', ') ?? 'none'}`)
-  console.log(`   Organizations: ${namedEntities.organizations.join(', ') ?? 'none'}`)
-  console.log(`   Locations: ${namedEntities.locations.join(', ') ?? 'none'}`)
-  console.log()
+  log('Entity Extractor', 'Extracted named entities:')
+  log('Entity Extractor', '  People:', namedEntities.people.join(', ') || 'none')
+  log('Entity Extractor', '  Organizations:', namedEntities.organizations.join(', ') || 'none')
+  log('Entity Extractor', '  Locations:', namedEntities.locations.join(', ') || 'none')
 
   return {
     people: namedEntities.people,

@@ -19,7 +19,9 @@
       "@agents": ["./agents/index.ts"],
       "@agents/*": ["./agents/*"],
       "@services": ["./services/index.ts"],
-      "@services/*": ["./services/*"]
+      "@services/*": ["./services/*"],
+      "@utils": ["./utils/index.ts"],
+      "@utils/*": ["./utils/*"]
     }
   },
   "include": ["src/**/*"],

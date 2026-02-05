@@ -3,6 +3,7 @@ import { z } from 'zod'
 
 import type { ArticleState } from '@root/state'
 import { fetchLLM } from '@adapters'
+import { log } from '@services'
 
 /* Schema for topic classification output */
 const topicsSchema = z.object({
@@ -16,7 +17,7 @@ export async function topicClassifier(state: ArticleState): Promise<Partial<Arti
   /* Extract the feed item and content from the state */
   const { feedItem, content } = state
 
-  console.log(`[Topic Classifier] Extracting topics`)
+  log('Topic Classifier', 'Extracting topics')
 
   /* Make sure we have the required data */
   if (!feedItem) throw new Error('No feed item to process')
@@ -27,8 +28,7 @@ export async function topicClassifier(state: ArticleState): Promise<Partial<Arti
   const result = await llm.invoke(prompt)
 
   /* Log the extracted topics */
-  console.log(`-> Extracted topics: ${result.topics.join(', ')}`)
-  console.log()
+  log('Topic Classifier', 'Extracted topics:', result.topics.join(', '))
 
   return { topics: result.topics }
 }

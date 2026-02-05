@@ -33,7 +33,6 @@ graph.addEdge('text-extractor', 'entity-extractor')
 graph.addEdge('summarizer', 'embedder')
 
 /* All four enrichment nodes must complete before article assembler */
-graph.addEdge('summarizer', 'article-assembler')
 graph.addEdge('topic-classifier', 'article-assembler')
 graph.addEdge('entity-extractor', 'article-assembler')
 graph.addEdge('embedder', 'article-assembler')

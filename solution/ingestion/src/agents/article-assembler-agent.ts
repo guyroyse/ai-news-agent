@@ -1,11 +1,12 @@
 import type { ArticleState } from '@root/state'
 import type { Article } from '@services'
+import { log } from '@services'
 
 export async function articleAssembler(state: ArticleState): Promise<Partial<ArticleState>> {
   /* Extract all the data from the state */
   const { feedItem, content, summary, topics, people, organizations, locations, embedding } = state
 
-  console.log(`[Article Assembler] Assembling final article`)
+  log('Article Assembler', 'Assembling final article')
 
   /* Make sure we have all the required data */
   if (!feedItem) throw new Error('No feed item to assemble')
@@ -37,8 +38,7 @@ export async function articleAssembler(state: ArticleState): Promise<Partial<Art
     embedding: embedding
   }
 
-  console.log(`-> Article assembled successfully`)
-  console.log()
+  log('Article Assembler', 'Article assembled successfully')
 
   return { article }
 }

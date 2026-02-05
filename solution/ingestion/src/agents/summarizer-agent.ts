@@ -2,6 +2,7 @@ import dedent from 'dedent'
 
 import type { ArticleState } from '@root/state'
 import { fetchLLM, fetchTokenCounter } from '@adapters'
+import { log } from '@services'
 
 const llm = fetchLLM()
 const tokenCounter = fetchTokenCounter()
@@ -10,12 +11,11 @@ export async function summarizer(state: ArticleState): Promise<Partial<ArticleSt
   /* Extract the content from the state */
   const { content } = state
 
-  console.log(`[Summarizer] Generating summary`)
+  log('Summarizer', 'Generating summary')
 
   /* If we don't have content, return an empty summary */
   if (!content) {
-    console.log(`-> No content available to summarize. Returning empty summary.`)
-    console.log()
+    log('Summarizer', 'No content available to summarize. Returning empty summary.')
     return { summary: '' }
   }
 
@@ -25,11 +25,10 @@ export async function summarizer(state: ArticleState): Promise<Partial<ArticleSt
   const summary = response.content as string
 
   /* Log the token counts to show the reduction */
-  console.log(`-> Tokens in content: ${tokenCounter.encode(content).length}`)
-  console.log(`-> Tokens in summary: ${tokenCounter.encode(summary).length}`)
+  log('Summarizer', 'Tokens in content:', tokenCounter.encode(content).length)
+  log('Summarizer', 'Tokens in summary:', tokenCounter.encode(summary).length)
 
-  console.log(`-> Summary generation complete`)
-  console.log()
+  log('Summarizer', 'Summary generation complete')
 
   return { summary }
 }

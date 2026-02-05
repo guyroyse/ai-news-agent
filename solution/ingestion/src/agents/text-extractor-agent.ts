@@ -3,6 +3,7 @@ import dedent from 'dedent'
 
 import type { ArticleState } from '@root/state'
 import { fetchLLM, fetchTokenCounter } from '@adapters'
+import { log } from '@services'
 
 const llm = fetchLLM()
 const tokenCounter = fetchTokenCounter()
@@ -14,12 +15,11 @@ export async function textExtractor(state: ArticleState): Promise<Partial<Articl
   /* Make sure we have a feed item */
   if (!feedItem) throw new Error('No feed item to process')
 
-  console.log(`[Text Extractor] Extracting article text`)
+  log('Text Extractor', 'Extracting article text')
 
   /* If we don't have HTML, use the RSS content. Nothing to do here. */
   if (!feedItem.html) {
-    console.log(`-> No HTML available, using RSS content`)
-    console.log()
+    log('Text Extractor', 'No HTML available, using RSS content')
     return { content: feedItem.content }
   }
 
@@ -32,12 +32,11 @@ export async function textExtractor(state: ArticleState): Promise<Partial<Articl
   const content = response.content as string
 
   /* Log the token counts to show the massive savings */
-  console.log(`-> Tokens in HTML: ${tokenCounter.encode(feedItem.html).length}`)
-  console.log(`-> Tokens in text: ${tokenCounter.encode(text).length}`)
-  console.log(`-> Tokens in content: ${tokenCounter.encode(content).length}`)
+  log('Text Extractor', 'Tokens in HTML:', tokenCounter.encode(feedItem.html).length)
+  log('Text Extractor', 'Tokens in text:', tokenCounter.encode(text).length)
+  log('Text Extractor', 'Tokens in content:', tokenCounter.encode(content).length)
 
-  console.log(`-> Text extraction complete`)
-  console.log()
+  log('Text Extractor', 'Text extraction complete')
 
   return { content }
 }

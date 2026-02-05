@@ -1,6 +1,7 @@
 import Parser from 'rss-parser'
 import { config } from '@root/config'
 import { articleExists } from './article-service.js'
+import { log } from './logger-service.js'
 
 export type FeedItem = {
   feedTitle: string
@@ -24,7 +25,7 @@ export async function fetchFeeds(): Promise<FeedItem[]> {
 
   /* Loop over the feeds and fetch them */
   for (const feedLink of feeds) {
-    console.log(`Fetching feed: ${feedLink}`)
+    log('Feed Service', 'Fetching feed:', feedLink)
     const items = await fetchFeed(feedLink)
     allItems.push(...items)
   }
@@ -41,8 +42,7 @@ async function fetchFeed(feedLink: string): Promise<FeedItem[]> {
     /* Make sure the feed titlt has a value */
     const feedTitle = feed.title ?? 'Untitled'
     const feedItemCount = feed.items.length
-    console.log(`-> Fetched ${feedItemCount} items for ${feedTitle}`)
-    console.log()
+    log('Feed Service', '-> Fetched', feedItemCount, 'items for', feedTitle)
 
     /* Fetch all items from the feed */
     const items = await fetchFeedItems(feed.items)
@@ -52,8 +52,7 @@ async function fetchFeed(feedLink: string): Promise<FeedItem[]> {
 
     return enrichedItems
   } catch (error) {
-    console.error(`⛔️ Error fetching ${feedLink}:`, error)
-    console.log()
+    log('Feed Service', '⛔️ Error fetching', feedLink, ':', error)
     return []
   }
 }

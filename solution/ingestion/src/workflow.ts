@@ -19,7 +19,7 @@ graph.addNode('summarizer', summarizer)
 graph.addNode('topic-classifier', topicClassifier)
 graph.addNode('entity-extractor', entityExtractor)
 graph.addNode('embedder', embedder)
-graph.addNode('article-assembler', articleAssembler)
+graph.addNode('article-assembler', articleAssembler, { defer: true })
 
 /* Add edges */
 graph.addEdge(START, 'text-extractor')
@@ -32,7 +32,7 @@ graph.addEdge('text-extractor', 'entity-extractor')
 /* Embedder waits for summarizer to complete */
 graph.addEdge('summarizer', 'embedder')
 
-/* All four enrichment nodes must complete before article assembler */
+/* All three enrichment nodes must complete before article assembler */
 graph.addEdge('topic-classifier', 'article-assembler')
 graph.addEdge('entity-extractor', 'article-assembler')
 graph.addEdge('embedder', 'article-assembler')

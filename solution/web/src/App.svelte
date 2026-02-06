@@ -1,21 +1,24 @@
 <script lang="ts">
-  import AppRouter, { Route } from '@src/app-router.svelte'
   import AppState from '@src/app-state.svelte'
   import BusyOverlay from '@components/BusyOverlay.svelte'
+  import Header from '@panels/header/Header.svelte'
+  import Footer from '@panels/footer/Footer.svelte'
+  import SearchPanel from '@panels/SearchPanel.svelte'
+  import ActivityPanel from '@panels/ActivityPanel.svelte'
+  import ChatPanel from '@panels/ChatPanel.svelte'
 
-  const appRouter = AppRouter.instance
   const appState = AppState.instance
 </script>
 
-<main class="flex-1 flex min-h-0 relative">
-  {#if appRouter.currentRoute === Route.Home}
-    <h1>TODO: Create Home View</h1>
-  {:else}
-    <div class="flex-1 flex items-center justify-center">
-      <p class="text-xl text-redis-hyper">Unknown route</p>
-    </div>
-  {/if}
+<Header />
+
+<main class="flex-1 flex min-h-0">
+  <SearchPanel />
+  <ActivityPanel />
+  <ChatPanel />
 </main>
+
+<Footer />
 
 {#if appState.displayOverlay}
   <BusyOverlay />

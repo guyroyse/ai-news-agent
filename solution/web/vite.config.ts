@@ -10,9 +10,8 @@ export default defineConfig({
       '@root': path.resolve('./'),
       '@src': path.resolve('./src'),
       '@components': path.resolve('./src/components'),
-      '@services': path.resolve('./src/services'),
-      '@state': path.resolve('./src/state'),
-      '@views': path.resolve('./src/views')
+      '@panels': path.resolve('./src/panels'),
+      '@services': path.resolve('./src/services')
     }
   },
   build: {

@@ -28,9 +28,9 @@
       "@root/*": ["./*"],
       "@src/*": ["./src/*"],
       "@components/*": ["./src/components/*"],
+      "@panels/*": ["./src/panels/*"],
       "@services/*": ["./src/services/*"],
-      "@state/*": ["./src/state/*"],
-      "@views/*": ["./src/views/*"]
+      "@states/*": ["./src/states/*"]
     },
     "resolveJsonModule": true
   },

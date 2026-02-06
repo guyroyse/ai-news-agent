@@ -2,9 +2,11 @@
   import PrimaryButton from '@components/buttons/PrimaryButton.svelte'
   import TextInput from '@components/TextInput.svelte'
   import { ingestArticles } from '@services/api-service'
-  import AppState from '@src/app-state.svelte'
+  import AppState from '@states/app-state.svelte'
+  import ActivitiesState from '@states/activities-state.svelte'
 
   const appState = AppState.instance
+  const activitiesState = ActivitiesState.instance
 
   let ingestCount = $state('')
 
@@ -22,8 +24,13 @@
     try {
       const result = await ingestArticles(limit)
       if (result.success) {
-        console.log(`Ingested ${result.processed} of ${result.found} articles`)
-        // TODO: Display results in activity stream
+        activitiesState.add({
+          type: 'ingest',
+          timestamp: new Date(),
+          found: result.found,
+          processed: result.processed,
+          articles: result.articles
+        })
       } else {
         console.error('Ingest failed:', result.error)
         // TODO: Show error in UI

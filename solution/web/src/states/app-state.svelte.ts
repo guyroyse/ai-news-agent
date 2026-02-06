@@ -21,3 +21,4 @@ export default class AppState {
     this.#isBusy = false
   }
 }
+

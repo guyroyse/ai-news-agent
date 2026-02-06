@@ -15,7 +15,8 @@ export default defineConfig(({ mode }) => {
         '@src': path.resolve('./src'),
         '@components': path.resolve('./src/components'),
         '@panels': path.resolve('./src/panels'),
-        '@services': path.resolve('./src/services')
+        '@services': path.resolve('./src/services'),
+        '@states': path.resolve('./src/states')
       }
     },
     server: {

@@ -1,7 +1,7 @@
 import { ChatOpenAI, OpenAIEmbeddings } from '@langchain/openai'
 import { encoding_for_model, type Tiktoken } from 'tiktoken'
 
-import { config } from '@root/config'
+import { config } from '@root/config.js'
 
 const MODEL_NAME = 'gpt-4o-mini'
 const LARGE_MODEL_NAME = 'gpt-4o'

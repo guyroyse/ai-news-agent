@@ -1,5 +1,5 @@
 import Parser from 'rss-parser'
-import { config } from '@root/config'
+import { config } from '@root/config.js'
 import { articleExists } from './article-service.js'
 import { log } from './logger-service.js'
 

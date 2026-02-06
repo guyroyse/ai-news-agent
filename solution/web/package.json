@@ -1,0 +1,32 @@
+{
+  "name": "@news-agent/web",
+  "version": "1.0.0",
+  "description": "News Agent web",
+  "author": "Guy Royse <guy@guy.dev>",
+  "license": "MIT",
+  "private": true,
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "rimraf dist && svelte-check && vite build",
+    "dev": "vite --port 5173",
+    "start": "serve dist -l 5173"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^6.2.4",
+    "@tailwindcss/vite": "^4.1.18",
+    "prettier-plugin-svelte": "^3.4.1",
+    "rimraf": "^6.1.2",
+    "serve": "^14.2.5",
+    "svelte": "^5.49.2",
+    "svelte-check": "^4.3.6",
+    "tailwindcss": "^4.1.18",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^7.1.0"
+  }
+}

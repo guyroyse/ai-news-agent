@@ -3,7 +3,7 @@
   import BusyOverlay from '@components/BusyOverlay.svelte'
   import Header from '@panels/header/Header.svelte'
   import Footer from '@panels/footer/Footer.svelte'
-  import SearchPanel from '@panels/SearchPanel.svelte'
+  import SearchPanel from '@panels/search/SearchPanel.svelte'
   import ActivityPanel from '@panels/activity/ActivityPanel.svelte'
   import ChatPanel from '@panels/ChatPanel.svelte'
 

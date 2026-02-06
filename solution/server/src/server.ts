@@ -3,6 +3,7 @@ import express from 'express'
 
 import { config } from './config.js'
 import { ingest } from '@ingestion'
+import { fetchAllSources } from '@services'
 
 const port = config.port
 
@@ -23,6 +24,15 @@ app.post('/api/ingest', async (req, res) => {
     const limit = Number(req.query.limit)
     const result = Number.isNaN(limit) ? await ingest() : await ingest(limit)
     res.json({ success: true, ...result })
+  } catch (error) {
+    res.status(500).json({ success: false, error: String(error) })
+  }
+})
+
+app.get('/api/sources', async (_req, res) => {
+  try {
+    const sources = await fetchAllSources()
+    res.json({ success: true, sources })
   } catch (error) {
     res.status(500).json({ success: false, error: String(error) })
   }

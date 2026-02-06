@@ -8,7 +8,13 @@ export type IngestActivity = {
   articles: ArticleSummary[]
 }
 
-export type Activity = IngestActivity
+export type ErrorActivity = {
+  type: 'error'
+  timestamp: Date
+  message: string
+}
+
+export type Activity = IngestActivity | ErrorActivity
 
 const STORAGE_KEY = 'news-agent-activities'
 const MAX_ACTIVITIES = 10
@@ -30,7 +36,25 @@ export default class ActivitiesState {
     return this.#activities
   }
 
-  add(activity: Activity): void {
+  addIngest(found: number, processed: number, articles: ArticleSummary[]): void {
+    this.#add({
+      type: 'ingest',
+      timestamp: new Date(),
+      found,
+      processed,
+      articles
+    })
+  }
+
+  addError(message: string): void {
+    this.#add({
+      type: 'error',
+      timestamp: new Date(),
+      message
+    })
+  }
+
+  #add(activity: Activity): void {
     this.#activities = [activity, ...this.#activities].slice(0, MAX_ACTIVITIES)
     this.#save()
   }

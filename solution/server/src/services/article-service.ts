@@ -27,11 +27,18 @@ export type Article = {
   embedding: number[]
 }
 
+const INDEX_NAME = 'news:aggregator:article:index'
+
 export async function articleExists(link: string): Promise<boolean> {
   const redis = await fetchRedisConnection()
   const key = generateArticleKey(link)
   const exists = await redis.exists(key)
   return exists === 1
+}
+
+export async function fetchAllSources(): Promise<string[]> {
+  const redis = await fetchRedisConnection()
+  return redis.ft.tagVals(INDEX_NAME, 'source')
 }
 
 export async function saveArticle(article: Article): Promise<void> {

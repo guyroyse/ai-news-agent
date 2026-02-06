@@ -4,9 +4,11 @@
   import { ingestArticles } from '@services/api-service'
   import AppState from '@states/app-state.svelte'
   import ActivitiesState from '@states/activities-state.svelte'
+  import SourcesState from '@states/sources-state.svelte'
 
   const appState = AppState.instance
   const activitiesState = ActivitiesState.instance
+  const sourcesState = SourcesState.instance
 
   let ingestCount = $state('')
 
@@ -24,20 +26,13 @@
     try {
       const result = await ingestArticles(limit)
       if (result.success) {
-        activitiesState.add({
-          type: 'ingest',
-          timestamp: new Date(),
-          found: result.found,
-          processed: result.processed,
-          articles: result.articles
-        })
+        activitiesState.addIngest(result.found, result.processed, result.articles)
+        await sourcesState.refresh()
       } else {
-        console.error('Ingest failed:', result.error)
-        // TODO: Show error in UI
+        activitiesState.addError(result.error)
       }
     } catch (error) {
-      console.error('Ingest error:', error)
-      // TODO: Show error in UI
+      activitiesState.addError(String(error))
     } finally {
       appState.hideOverlay()
     }

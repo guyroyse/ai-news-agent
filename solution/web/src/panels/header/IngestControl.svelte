@@ -1,6 +1,10 @@
 <script lang="ts">
   import PrimaryButton from '@components/buttons/PrimaryButton.svelte'
   import TextInput from '@components/TextInput.svelte'
+  import { ingestArticles } from '@services/api-service'
+  import AppState from '@src/app-state.svelte'
+
+  const appState = AppState.instance
 
   let ingestCount = $state('')
 
@@ -9,11 +13,27 @@
     return filtered === '0' ? '' : filtered
   }
 
-  function handleIngest() {
-    const count = ingestCount ? Number(ingestCount) : undefined
-    console.log('Ingest clicked', count)
-    // TODO: Call ingest API
+  async function handleIngest() {
+    const limit = ingestCount ? Number(ingestCount) : undefined
     ingestCount = ''
+
+    appState.showOverlay()
+
+    try {
+      const result = await ingestArticles(limit)
+      if (result.success) {
+        console.log(`Ingested ${result.processed} of ${result.found} articles`)
+        // TODO: Display results in activity stream
+      } else {
+        console.error('Ingest failed:', result.error)
+        // TODO: Show error in UI
+      }
+    } catch (error) {
+      console.error('Ingest error:', error)
+      // TODO: Show error in UI
+    } finally {
+      appState.hideOverlay()
+    }
   }
 </script>
 

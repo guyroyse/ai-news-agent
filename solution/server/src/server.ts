@@ -10,7 +10,7 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-app.get('/version', (_req, res) => {
+app.get('/api/version', (_req, res) => {
   res.json({
     name: 'News Agent API',
     version: '1.0.0',
@@ -18,7 +18,7 @@ app.get('/version', (_req, res) => {
   })
 })
 
-app.post('/ingest', async (req, res) => {
+app.post('/api/ingest', async (req, res) => {
   try {
     const limit = Number(req.query.limit)
     const result = Number.isNaN(limit) ? await ingest() : await ingest(limit)

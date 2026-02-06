@@ -16,7 +16,7 @@ class Config {
   }
 
   get port(): number {
-    return parseInt(process.env.PORT || '3000', 10)
+    return Number(process.env.API_PORT ?? 3000)
   }
 }
 

@@ -6,6 +6,7 @@
 @import '@fortawesome/fontawesome-free/css/all.css';
 
 @import 'tailwindcss';
+@plugin '@tailwindcss/typography';
 
 @theme {
   --font-sans: 'Space Grotesk', sans-serif;
@@ -41,5 +42,3 @@
   --color-redis-yellow-20: #f8ffd2;
   --color-redis-yellow-10: #fbffe8;
 }
-
-

@@ -38,14 +38,42 @@ export type SourcesResult = {
 
 export type SourcesResponse = SourcesResult | ApiError
 
+export type TopicsResult = {
+  success: true
+  topics: string[]
+}
+
+export type TopicsResponse = TopicsResult | ApiError
+
+export type PeopleResult = {
+  success: true
+  people: string[]
+}
+
+export type PeopleResponse = PeopleResult | ApiError
+
+export type OrganizationsResult = {
+  success: true
+  organizations: string[]
+}
+
+export type OrganizationsResponse = OrganizationsResult | ApiError
+
+export type LocationsResult = {
+  success: true
+  locations: string[]
+}
+
+export type LocationsResponse = LocationsResult | ApiError
+
 export type SearchCriteria = {
   sources?: string[]
-  startDate?: Date | null
-  endDate?: Date | null
-  topics?: string
-  people?: string
-  organizations?: string
-  locations?: string
+  startDate?: string
+  endDate?: string
+  topics?: string[]
+  people?: string[]
+  organizations?: string[]
+  locations?: string[]
   semanticQuery?: string
 }
 

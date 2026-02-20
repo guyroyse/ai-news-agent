@@ -45,7 +45,7 @@ function extractTextFromHtml(html: string): string {
   return convert(html, {
     wordwrap: false,
     selectors: [
-      { selector: 'a', options: { ignoreHref: true } },
+      { selector: 'a', options: { ignoreHref: false } },
       { selector: 'img', format: 'skip' },
       { selector: 'script', format: 'skip' },
       { selector: 'style', format: 'skip' }
@@ -56,8 +56,15 @@ function extractTextFromHtml(html: string): string {
 function buildPrompt(text: string): string {
   return dedent`
     Extract the main article content from the following text.
-    Return only the article text, excluding ads, navigation, comments, and other non-article content.
+    Return only the article text, excluding the title, ads, navigation, comments, and other non-article content.
     Do not include any preamble or explanation, just the extracted text.
+
+    Format the output as Markdown:
+    - Use paragraphs separated by blank lines
+    - Preserve any links as [text](url)
+    - Use headers (##, ###) if appropriate
+    - Use lists where the content has bullet points
+    - Do NOT include the article title (it is stored separately)
 
     Text:
     ${text}`

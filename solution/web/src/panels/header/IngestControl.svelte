@@ -23,7 +23,7 @@
       const result = await ingestArticles(limit)
       if (result.success) {
         appStore.activities.addIngest(result.found, result.processed, result.articles)
-        await appStore.sources.refresh()
+        await Promise.all([appStore.sources.refresh(), appStore.tags.refresh()])
       } else {
         appStore.activities.addError(result.error)
       }

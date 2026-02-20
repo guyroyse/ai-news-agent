@@ -43,6 +43,10 @@ export function fetchEmbedder(): OpenAIEmbeddings {
   return embedderInstance
 }
 
+export function fetchEmbeddingDims(): number {
+  return 1536
+}
+
 export function fetchTokenCounter(): Tiktoken {
   if (!encodingInstance) encodingInstance = encoding_for_model(MODEL_NAME)
 

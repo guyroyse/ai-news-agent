@@ -27,6 +27,8 @@
     "vite": "^7.3.1"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^7.1.0"
+    "@fortawesome/fontawesome-free": "^7.1.0",
+    "@tailwindcss/typography": "^0.5.19",
+    "marked": "^17.0.3"
   }
 }

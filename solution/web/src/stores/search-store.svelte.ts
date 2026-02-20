@@ -7,10 +7,10 @@ export default class SearchStore {
   sources = $state<string[]>([])
   #startDate = $state<Date | null>(null)
   #endDate = $state<Date | null>(null)
-  topics = $state('')
-  people = $state('')
-  organizations = $state('')
-  locations = $state('')
+  topics = $state<string[]>([])
+  people = $state<string[]>([])
+  organizations = $state<string[]>([])
+  locations = $state<string[]>([])
   semanticQuery = $state('')
 
   constructor(appStore: AppStore) {
@@ -65,22 +65,22 @@ export default class SearchStore {
     this.sources = []
     this.#startDate = null
     this.#endDate = null
-    this.topics = ''
-    this.people = ''
-    this.organizations = ''
-    this.locations = ''
+    this.topics = []
+    this.people = []
+    this.organizations = []
+    this.locations = []
     this.semanticQuery = ''
   }
 
   #buildCriteria(): SearchCriteria {
     const criteria: SearchCriteria = {}
     if (this.sources.length > 0) criteria.sources = this.sources
-    if (this.#startDate) criteria.startDate = this.#startDate
-    if (this.#endDate) criteria.endDate = this.#endDate
-    if (this.topics) criteria.topics = this.topics
-    if (this.people) criteria.people = this.people
-    if (this.organizations) criteria.organizations = this.organizations
-    if (this.locations) criteria.locations = this.locations
+    if (this.#startDate) criteria.startDate = this.#startDate.toISOString()
+    if (this.#endDate) criteria.endDate = this.#endDate.toISOString()
+    if (this.topics.length > 0) criteria.topics = this.topics
+    if (this.people.length > 0) criteria.people = this.people
+    if (this.organizations.length > 0) criteria.organizations = this.organizations
+    if (this.locations.length > 0) criteria.locations = this.locations
     if (this.semanticQuery) criteria.semanticQuery = this.semanticQuery
     return criteria
   }

@@ -1,6 +1,6 @@
 import Parser from 'rss-parser'
 import { config } from '@root/config.js'
-import { articleExists } from './article-service.js'
+import { articleExists } from './article-service/index.js'
 import { log } from './logger-service.js'
 
 export type FeedItem = {

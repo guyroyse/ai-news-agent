@@ -3,7 +3,7 @@
   import SemanticSearchInput from './SemanticSearchInput.svelte'
   import DateRangeFilter from './DateRangeFilter.svelte'
   import SourceFilter from './SourceFilter.svelte'
-  import TextFilter from './TextFilter.svelte'
+  import TagInput from './TagInput.svelte'
 
   const appStore = AppStore.instance
 
@@ -31,17 +31,12 @@
     <DateRangeFilter />
 
     <!-- Topics: Extracted by topic-classifier agent -->
-    <TextFilter field="topics" label="Topics" placeholder="e.g. climate, economy" />
+    <TagInput field="topics" label="Topics" placeholder="Type to search topics..." />
 
     <!-- Named Entities: Extracted by entity-extractor agent -->
-    <fieldset>
-      <legend class="text-sm text-redis-dusk-30 mb-2">Named Entities</legend>
-      <div class="space-y-2">
-        <TextFilter field="people" placeholder="People, e.g. Biden, Musk" />
-        <TextFilter field="organizations" placeholder="Organizations, e.g. NASA, Google" />
-        <TextFilter field="locations" placeholder="Locations, e.g. Ukraine, California" />
-      </div>
-    </fieldset>
+    <TagInput field="people" label="People" placeholder="Type to search people..." />
+    <TagInput field="organizations" label="Organizations" placeholder="Type to search organizations..." />
+    <TagInput field="locations" label="Locations" placeholder="Type to search locations..." />
 
     <!-- Vector: Semantic search using embeddings -->
     <SemanticSearchInput />

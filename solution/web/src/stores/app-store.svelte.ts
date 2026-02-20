@@ -1,5 +1,6 @@
 import ActivitiesStore from './activities-store.svelte'
 import SourcesStore from './sources-store.svelte'
+import TagsStore from './tags-store.svelte'
 import SearchStore from './search-store.svelte'
 
 export default class AppStore {
@@ -9,6 +10,7 @@ export default class AppStore {
 
   #activities = new ActivitiesStore()
   #sources = new SourcesStore()
+  #tags = new TagsStore()
   #search: SearchStore
 
   private constructor() {
@@ -25,6 +27,10 @@ export default class AppStore {
 
   get sources(): SourcesStore {
     return this.#sources
+  }
+
+  get tags(): TagsStore {
+    return this.#tags
   }
 
   get search(): SearchStore {

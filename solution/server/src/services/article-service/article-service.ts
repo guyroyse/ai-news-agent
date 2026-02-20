@@ -103,9 +103,12 @@ export async function searchArticles(criteria: SearchCriteria, limit: number = 5
     // Build the text query from criteria
     const queryParts: string[] = []
 
+    // Escape special characters in TAG values
+    const escapeTag = (tag: string) => tag.replace(/[-\\,.<>{}[\]"':;!@#$%^&*()+=]/g, '\\$&')
+
     // Source filter (TAG field - OR logic, any of the selected sources)
     if (criteria.sources && criteria.sources.length > 0) {
-      const sourceTags = criteria.sources.join('|')
+      const sourceTags = criteria.sources.map(escapeTag).join('|')
       queryParts.push(`@source:{${sourceTags}}`)
     }
 
@@ -117,10 +120,11 @@ export async function searchArticles(criteria: SearchCriteria, limit: number = 5
     }
 
     // TAG filters with AND logic - each selected tag adds a separate filter
-    if (criteria.topics) criteria.topics.forEach(tag => queryParts.push(`@topics:{${tag}}`))
-    if (criteria.people) criteria.people.forEach(tag => queryParts.push(`@people:{${tag}}`))
-    if (criteria.organizations) criteria.organizations.forEach(tag => queryParts.push(`@organizations:{${tag}}`))
-    if (criteria.locations) criteria.locations.forEach(tag => queryParts.push(`@locations:{${tag}}`))
+    if (criteria.topics) criteria.topics.forEach(tag => queryParts.push(`@topics:{${escapeTag(tag)}}`))
+    if (criteria.people) criteria.people.forEach(tag => queryParts.push(`@people:{${escapeTag(tag)}}`))
+    if (criteria.organizations)
+      criteria.organizations.forEach(tag => queryParts.push(`@organizations:{${escapeTag(tag)}}`))
+    if (criteria.locations) criteria.locations.forEach(tag => queryParts.push(`@locations:{${escapeTag(tag)}}`))
 
     const textQuery = queryParts.length > 0 ? queryParts.join(' ') : '*'
 
@@ -157,7 +161,14 @@ export async function searchArticles(criteria: SearchCriteria, limit: number = 5
       title: doc.value.title ?? '',
       link: doc.value.link ?? '',
       content: doc.value.content ?? '',
-      source: doc.value.source?.title ?? ''
+      source: doc.value.source?.title ?? '',
+      publicationDate: doc.value.publicationDate ?? 0,
+      topics: doc.value.topics ?? [],
+      namedEntities: {
+        people: doc.value.namedEntities?.people ?? [],
+        organizations: doc.value.namedEntities?.organizations ?? [],
+        locations: doc.value.namedEntities?.locations ?? []
+      }
     }))
 
     return { success: true, articles }

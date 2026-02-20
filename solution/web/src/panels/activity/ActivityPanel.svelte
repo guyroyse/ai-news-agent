@@ -5,7 +5,7 @@
   const appStore = AppStore.instance
 </script>
 
-<section class="flex-1 p-4 overflow-y-auto bg-redis-midnight">
+<section class="flex-1 p-4 overflow-y-auto bg-redis-midnight border-y-4 border-redis-midnight">
   <header class="flex justify-between items-center mb-4">
     <h2 class="text-lg font-semibold text-white">Activity</h2>
     {#if appStore.activities.activities.length > 0}

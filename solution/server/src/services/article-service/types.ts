@@ -39,6 +39,13 @@ export type SearchedArticle = {
   link: string
   content: string
   source: string
+  publicationDate: number
+  topics: string[]
+  namedEntities: {
+    people: string[]
+    organizations: string[]
+    locations: string[]
+  }
 }
 
 export type SearchResult = {

@@ -85,5 +85,5 @@
     <SuggestionList suggestions={filteredTags} visible={showSuggestions} onselect={addTag} />
   </div>
 
-  <TagChips tags={selectedTags} onremove={removeTag} />
+  <TagChips tags={selectedTags} type={field} onremove={removeTag} />
 </fieldset>

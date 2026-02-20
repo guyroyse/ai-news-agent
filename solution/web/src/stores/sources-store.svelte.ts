@@ -1,16 +1,10 @@
 import { fetchSources } from '@services/api-service'
 
-export default class SourcesState {
-  static #instance: SourcesState
-
+export default class SourcesStore {
   #sources = $state<string[]>([])
 
-  private constructor() {
+  constructor() {
     this.#load()
-  }
-
-  static get instance() {
-    return this.#instance ?? (this.#instance = new SourcesState())
   }
 
   get sources(): string[] {

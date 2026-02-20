@@ -38,3 +38,27 @@ export type SourcesResult = {
 
 export type SourcesResponse = SourcesResult | ApiError
 
+export type SearchCriteria = {
+  sources?: string[]
+  startDate?: Date | null
+  endDate?: Date | null
+  topics?: string
+  people?: string
+  organizations?: string
+  locations?: string
+  semanticQuery?: string
+}
+
+export type SearchedArticle = {
+  title: string
+  link: string
+  content: string
+  source: string
+}
+
+export type SearchResult = {
+  success: true
+  articles: SearchedArticle[]
+}
+
+export type SearchResponse = SearchResult | ApiError

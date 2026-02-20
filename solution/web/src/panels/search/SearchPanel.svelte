@@ -1,32 +1,25 @@
 <script lang="ts">
+  import AppStore from '@stores/app-store.svelte'
   import SemanticSearchInput from './SemanticSearchInput.svelte'
   import DateRangeFilter from './DateRangeFilter.svelte'
   import SourceFilter from './SourceFilter.svelte'
   import TextFilter from './TextFilter.svelte'
-  import SearchButton from './SearchButton.svelte'
 
-  let selectedSources = $state<string[]>([])
-  let startDate = $state('')
-  let endDate = $state('')
-  let topics = $state('')
-  let people = $state('')
-  let organizations = $state('')
-  let locations = $state('')
-  let searchQuery = $state('')
+  const appStore = AppStore.instance
 
   function handleSearch() {
-    console.log('Search triggered', {
-      searchQuery,
-      startDate,
-      endDate,
-      selectedSources,
-      topics,
-      people,
-      organizations,
-      locations
-    })
-    // TODO: Call search API
+    appStore.search.search()
   }
+
+  function handleClear() {
+    appStore.search.clear()
+  }
+
+  const searchButtonClasses =
+    'flex-1 px-3 py-2 text-sm font-medium rounded bg-redis-hyper text-white hover:bg-redis-deep-hyper focus:outline-none focus:ring-2 focus:ring-redis-hyper focus:ring-offset-2 focus:ring-offset-redis-dusk cursor-pointer'
+
+  const clearButtonClasses =
+    'px-3 py-2 text-sm font-medium rounded bg-redis-dusk-90 text-white hover:bg-redis-dusk-70 focus:outline-none focus:ring-2 focus:ring-redis-dusk-70 focus:ring-offset-2 focus:ring-offset-redis-dusk cursor-pointer'
 </script>
 
 <aside class="w-72 bg-redis-dusk border-y-4 border-r-4 border-redis-midnight p-4 overflow-y-auto flex flex-col">
@@ -34,27 +27,33 @@
 
   <div class="space-y-4 flex-1">
     <!-- Structured: From the feed itself -->
-    <SourceFilter bind:selected={selectedSources} />
-    <DateRangeFilter bind:startDate bind:endDate />
+    <SourceFilter />
+    <DateRangeFilter />
 
     <!-- Topics: Extracted by topic-classifier agent -->
-    <TextFilter label="Topics" bind:value={topics} placeholder="e.g. climate, economy" />
+    <TextFilter field="topics" label="Topics" placeholder="e.g. climate, economy" />
 
     <!-- Named Entities: Extracted by entity-extractor agent -->
     <fieldset>
       <legend class="text-sm text-redis-dusk-30 mb-2">Named Entities</legend>
       <div class="space-y-2">
-        <TextFilter bind:value={people} placeholder="People, e.g. Biden, Musk" />
-        <TextFilter bind:value={organizations} placeholder="Organizations, e.g. NASA, Google" />
-        <TextFilter bind:value={locations} placeholder="Locations, e.g. Ukraine, California" />
+        <TextFilter field="people" placeholder="People, e.g. Biden, Musk" />
+        <TextFilter field="organizations" placeholder="Organizations, e.g. NASA, Google" />
+        <TextFilter field="locations" placeholder="Locations, e.g. Ukraine, California" />
       </div>
     </fieldset>
 
     <!-- Vector: Semantic search using embeddings -->
-    <SemanticSearchInput bind:query={searchQuery} />
+    <SemanticSearchInput />
   </div>
 
-  <div class="mt-4">
-    <SearchButton onSearch={handleSearch} />
+  <div class="flex gap-2 mt-8">
+    <button type="button" onclick={handleSearch} class={searchButtonClasses}>
+      <i class="fa-solid fa-magnifying-glass mr-2"></i>
+      Search
+    </button>
+    <button type="button" onclick={handleClear} class={clearButtonClasses} title="Clear all filters">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
   </div>
 </aside>

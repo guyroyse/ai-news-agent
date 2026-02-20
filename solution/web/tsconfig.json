@@ -30,7 +30,7 @@
       "@components/*": ["./src/components/*"],
       "@panels/*": ["./src/panels/*"],
       "@services/*": ["./src/services/*"],
-      "@states/*": ["./src/states/*"]
+      "@stores/*": ["./src/stores/*"]
     },
     "resolveJsonModule": true
   },

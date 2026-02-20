@@ -1,4 +1,4 @@
-import type { VersionInfo, IngestResponse, SourcesResponse } from './api-types'
+import type { VersionInfo, IngestResponse, SourcesResponse, SearchCriteria, SearchResponse } from './api-types'
 
 export * from './api-types'
 
@@ -17,5 +17,17 @@ export async function ingestArticles(limit?: number): Promise<IngestResponse> {
 
 export async function fetchSources(): Promise<SourcesResponse> {
   const response = await fetch(`${API_BASE}/sources`)
+  return response.json()
+}
+
+export async function searchArticles(criteria: SearchCriteria, limit: number = 10): Promise<SearchResponse> {
+  // TODO: Remove this temporary hardcoded response
+  throw new Error('Network error: Failed to fetch')
+
+  const response = await fetch(`${API_BASE}/search?limit=${limit}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(criteria)
+  })
   return response.json()
 }

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { IngestActivity } from '@states/activities-state.svelte'
+  import type { IngestActivity } from '@stores/activities-store.svelte'
   import type { ArticleSummary } from '@services/api-service'
   import SourceGroup from './SourceGroup.svelte'
 
@@ -9,8 +9,8 @@
 
   let { activity }: Props = $props()
 
-  function formatTime(date: Date): string {
-    return date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
+  function formatDateTime(date: Date): string {
+    return date.toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
   }
 
   function groupBySource(articles: ArticleSummary[]): Map<string, ArticleSummary[]> {
@@ -33,7 +33,7 @@
         Ingested {activity.processed} of {activity.found} articles
       </span>
     </div>
-    <time class="text-sm text-redis-dusk-30">{formatTime(activity.timestamp)}</time>
+    <time class="text-sm text-redis-dusk-30">{formatDateTime(activity.timestamp)}</time>
   </header>
 
   <div class="px-4 py-3">

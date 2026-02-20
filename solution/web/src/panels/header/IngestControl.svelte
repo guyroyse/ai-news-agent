@@ -2,13 +2,9 @@
   import PrimaryButton from '@components/buttons/PrimaryButton.svelte'
   import TextInput from '@components/TextInput.svelte'
   import { ingestArticles } from '@services/api-service'
-  import AppState from '@states/app-state.svelte'
-  import ActivitiesState from '@states/activities-state.svelte'
-  import SourcesState from '@states/sources-state.svelte'
+  import AppStore from '@stores/app-store.svelte'
 
-  const appState = AppState.instance
-  const activitiesState = ActivitiesState.instance
-  const sourcesState = SourcesState.instance
+  const appStore = AppStore.instance
 
   let ingestCount = $state('')
 
@@ -21,20 +17,20 @@
     const limit = ingestCount ? Number(ingestCount) : undefined
     ingestCount = ''
 
-    appState.showOverlay()
+    appStore.showOverlay()
 
     try {
       const result = await ingestArticles(limit)
       if (result.success) {
-        activitiesState.addIngest(result.found, result.processed, result.articles)
-        await sourcesState.refresh()
+        appStore.activities.addIngest(result.found, result.processed, result.articles)
+        await appStore.sources.refresh()
       } else {
-        activitiesState.addError(result.error)
+        appStore.activities.addError(result.error)
       }
     } catch (error) {
-      activitiesState.addError(String(error))
+      appStore.activities.addError(String(error))
     } finally {
-      appState.hideOverlay()
+      appStore.hideOverlay()
     }
   }
 </script>

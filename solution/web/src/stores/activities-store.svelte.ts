@@ -1,4 +1,4 @@
-import type { ArticleSummary } from '@services/api-service'
+import type { ArticleSummary, SearchedArticle } from '@services/api-service'
 
 export type IngestActivity = {
   type: 'ingest'
@@ -14,22 +14,27 @@ export type ErrorActivity = {
   message: string
 }
 
-export type Activity = IngestActivity | ErrorActivity
+export type ArticleActivity = {
+  type: 'article'
+  timestamp: Date
+  article: SearchedArticle
+}
+
+export type NoArticlesFoundActivity = {
+  type: 'no-articles-found'
+  timestamp: Date
+}
+
+export type Activity = IngestActivity | ErrorActivity | ArticleActivity | NoArticlesFoundActivity
 
 const STORAGE_KEY = 'news-agent-activities'
 const MAX_ACTIVITIES = 10
 
-export default class ActivitiesState {
-  static #instance: ActivitiesState
-
+export default class ActivitiesStore {
   #activities = $state<Activity[]>([])
 
-  private constructor() {
+  constructor() {
     this.#activities = this.#load()
-  }
-
-  static get instance() {
-    return this.#instance ?? (this.#instance = new ActivitiesState())
   }
 
   get activities(): Activity[] {
@@ -52,6 +57,23 @@ export default class ActivitiesState {
       timestamp: new Date(),
       message
     })
+  }
+
+  addSearch(articles: SearchedArticle[]): void {
+    const timestamp = new Date()
+
+    if (articles.length === 0) {
+      this.#add({ type: 'no-articles-found', timestamp })
+      return
+    }
+
+    const articleActivities: ArticleActivity[] = articles.map(article => ({
+      type: 'article',
+      timestamp,
+      article
+    }))
+    this.#activities = [...articleActivities, ...this.#activities].slice(0, MAX_ACTIVITIES)
+    this.#save()
   }
 
   #add(activity: Activity): void {

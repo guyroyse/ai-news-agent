@@ -1,3 +1,3 @@
-export * from './feed-service.js'
+export * from './feed-service/index.js'
 export * from './article-service/index.js'
-export * from './logger-service.js'
+export * from './logger-service/index.js'

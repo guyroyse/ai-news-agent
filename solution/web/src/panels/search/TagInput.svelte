@@ -2,11 +2,10 @@
   import AppStore from '@stores/app-store.svelte'
   import SuggestionList from './SuggestionList.svelte'
   import TagChips from './TagChips.svelte'
-
-  type TagField = 'topics' | 'people' | 'organizations' | 'locations'
+  import type { TagType } from '@components/chips/chip-types'
 
   type Props = {
-    field: TagField
+    field: TagType
     label: string
     placeholder?: string
   }

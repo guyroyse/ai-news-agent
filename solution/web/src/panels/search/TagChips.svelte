@@ -1,7 +1,6 @@
 <script lang="ts">
-  import TagChip from './TagChip.svelte'
-
-  type TagType = 'topics' | 'people' | 'organizations' | 'locations'
+  import TagChip from '@components/chips/TagChip.svelte'
+  import type { TagType } from '@components/chips/chip-types'
 
   type Props = {
     tags: string[]

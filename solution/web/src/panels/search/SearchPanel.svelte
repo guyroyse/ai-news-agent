@@ -4,6 +4,7 @@
   import DateRangeFilter from './DateRangeFilter.svelte'
   import SourceFilter from './SourceFilter.svelte'
   import TagInput from './TagInput.svelte'
+  import { TagType } from '@components/chips/chip-types'
 
   const appStore = AppStore.instance
 
@@ -31,12 +32,12 @@
     <DateRangeFilter />
 
     <!-- Topics: Extracted by topic-classifier agent -->
-    <TagInput field="topics" label="Topics" placeholder="Type to search topics..." />
+    <TagInput field={TagType.Topics} label="Topics" placeholder="Type to search topics..." />
 
     <!-- Named Entities: Extracted by entity-extractor agent -->
-    <TagInput field="people" label="People" placeholder="Type to search people..." />
-    <TagInput field="organizations" label="Organizations" placeholder="Type to search organizations..." />
-    <TagInput field="locations" label="Locations" placeholder="Type to search locations..." />
+    <TagInput field={TagType.People} label="People" placeholder="Type to search people..." />
+    <TagInput field={TagType.Organizations} label="Organizations" placeholder="Type to search organizations..." />
+    <TagInput field={TagType.Locations} label="Locations" placeholder="Type to search locations..." />
 
     <!-- Vector: Semantic search using embeddings -->
     <SemanticSearchInput />

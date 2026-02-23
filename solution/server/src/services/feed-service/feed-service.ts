@@ -1,7 +1,7 @@
 import Parser from 'rss-parser'
 import { config } from '@root/config.js'
-import { articleExists } from './article-service/index.js'
-import { log } from './logger-service.js'
+import { articleExists } from '../article-service/index.js'
+import { log } from '../logger-service/index.js'
 
 export type FeedItem = {
   feedTitle: string
@@ -99,3 +99,4 @@ async function fetchItemHtml(url: string): Promise<string | undefined> {
   }
   return undefined
 }
+

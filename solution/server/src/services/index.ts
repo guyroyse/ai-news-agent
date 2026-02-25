@@ -1,3 +1,6 @@
 export * from './feed-service/index.js'
 export * from './article-service/index.js'
 export * from './logger-service/index.js'
+export * from './memory-service/index.js'
+export * from './activity-service/index.js'
+export * from './chat-history-service/index.js'

@@ -18,6 +18,10 @@ class Config {
   get port(): number {
     return Number(process.env.API_PORT ?? 3000)
   }
+
+  get amsUrl(): string {
+    return process.env.AMS_URL || 'http://localhost:8000'
+  }
 }
 
 export const config = new Config()

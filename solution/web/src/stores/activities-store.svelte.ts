@@ -1,111 +1,115 @@
-import type { ArticleSummary, SearchedArticle } from '@services/api-service'
+import {
+  fetchActivities,
+  addActivity,
+  clearActivities,
+  type ArticleSummary,
+  type SearchedArticle,
+  type BriefPeriod,
+  type Activity,
+  type IngestActivity,
+  type ErrorActivity,
+  type ArticleActivity,
+  type NoArticlesFoundActivity,
+  type BriefActivity
+} from '@services/api-service'
 
-export type IngestActivity = {
-  type: 'ingest'
-  timestamp: Date
-  found: number
-  processed: number
-  articles: ArticleSummary[]
-}
+export type { Activity, IngestActivity, ErrorActivity, ArticleActivity, NoArticlesFoundActivity, BriefActivity }
 
-export type ErrorActivity = {
-  type: 'error'
-  timestamp: Date
-  message: string
-}
-
-export type ArticleActivity = {
-  type: 'article'
-  timestamp: Date
-  article: SearchedArticle
-}
-
-export type NoArticlesFoundActivity = {
-  type: 'no-articles-found'
-  timestamp: Date
-}
-
-export type Activity = IngestActivity | ErrorActivity | ArticleActivity | NoArticlesFoundActivity
-
-const STORAGE_KEY = 'news-agent-activities'
 const MAX_ACTIVITIES = 10
 
 export default class ActivitiesStore {
   #activities = $state<Activity[]>([])
 
   constructor() {
-    this.#activities = this.#load()
+    this.#load()
   }
 
   get activities(): Activity[] {
     return this.#activities
   }
 
-  addIngest(found: number, processed: number, articles: ArticleSummary[]): void {
-    this.#add({
+  async addIngest(found: number, processed: number, articles: ArticleSummary[]): Promise<void> {
+    const activity: IngestActivity = {
       type: 'ingest',
-      timestamp: new Date(),
+      timestamp: new Date().toISOString(),
       found,
       processed,
       articles
-    })
+    }
+    await this.#add(activity)
   }
 
-  addError(message: string): void {
-    this.#add({
+  async addError(message: string): Promise<void> {
+    const activity: ErrorActivity = {
       type: 'error',
-      timestamp: new Date(),
+      timestamp: new Date().toISOString(),
       message
-    })
+    }
+    await this.#add(activity)
   }
 
-  addSearch(articles: SearchedArticle[]): void {
-    const timestamp = new Date()
+  async addSearch(articles: SearchedArticle[]): Promise<void> {
+    const timestamp = new Date().toISOString()
 
     if (articles.length === 0) {
-      this.#add({ type: 'no-articles-found', timestamp })
+      await this.#add({ type: 'no-articles-found', timestamp })
       return
     }
 
-    const articleActivities: ArticleActivity[] = articles.map(article => ({
-      type: 'article',
-      timestamp,
-      article
-    }))
-    this.#activities = [...articleActivities, ...this.#activities].slice(0, MAX_ACTIVITIES)
-    this.#save()
-  }
-
-  #add(activity: Activity): void {
-    this.#activities = [activity, ...this.#activities].slice(0, MAX_ACTIVITIES)
-    this.#save()
-  }
-
-  clear(): void {
-    this.#activities = []
-    this.#save()
-  }
-
-  #load(): Activity[] {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY)
-      if (!stored) return []
-      const parsed = JSON.parse(stored)
-      // Convert timestamp strings back to Date objects
-      return parsed.map((activity: Activity) => ({
-        ...activity,
-        timestamp: new Date(activity.timestamp)
-      }))
-    } catch {
-      return []
+    for (const article of articles) {
+      const activity: ArticleActivity = {
+        type: 'article',
+        timestamp,
+        article
+      }
+      await this.#add(activity)
     }
   }
 
-  #save(): void {
+  async addChatArticles(articles: SearchedArticle[]): Promise<void> {
+    const timestamp = new Date().toISOString()
+
+    for (const article of articles) {
+      const activity: ArticleActivity = {
+        type: 'article',
+        timestamp,
+        article
+      }
+      await this.#add(activity)
+    }
+  }
+
+  async addBrief(period: BriefPeriod, brief: string, articleCount: number): Promise<void> {
+    const activity: BriefActivity = {
+      type: 'brief',
+      timestamp: new Date().toISOString(),
+      period,
+      brief,
+      articleCount
+    }
+    await this.#add(activity)
+  }
+
+  async #add(activity: Activity): Promise<void> {
+    // Add to local state immediately for responsiveness
+    this.#activities = [...this.#activities, activity].slice(-MAX_ACTIVITIES)
+    // Persist to backend
+    await addActivity(activity)
+  }
+
+  async clear(): Promise<void> {
+    this.#activities = []
+    await clearActivities()
+  }
+
+  async #load(): Promise<void> {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(this.#activities.slice(0, MAX_ACTIVITIES)))
+      const result = await fetchActivities()
+      if (result.success) {
+        this.#activities = result.activities.slice(-MAX_ACTIVITIES)
+      }
     } catch {
-      // Ignore storage errors
+      // Ignore load errors
     }
   }
 }

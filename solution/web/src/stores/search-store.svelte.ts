@@ -4,6 +4,7 @@ import type AppStore from './app-store.svelte'
 export default class SearchStore {
   #appStore: AppStore
 
+  #isSearching = $state<boolean>(false)
   sources = $state<string[]>([])
   #startDate = $state<Date | null>(null)
   #endDate = $state<Date | null>(null)
@@ -15,6 +16,10 @@ export default class SearchStore {
 
   constructor(appStore: AppStore) {
     this.#appStore = appStore
+  }
+
+  get isSearching(): boolean {
+    return this.#isSearching
   }
 
   // String getters/setters for HTML date inputs
@@ -44,20 +49,21 @@ export default class SearchStore {
   }
 
   async search(): Promise<void> {
-    this.#appStore.showOverlay()
+    if (this.#isSearching) return
+    this.#isSearching = true
 
     try {
       const result = await searchArticles(this.#buildCriteria())
 
       if (result.success) {
-        this.#appStore.activities.addSearch(result.articles)
+        await this.#appStore.activities.addSearch(result.articles)
       } else {
-        this.#appStore.activities.addError(result.error)
+        await this.#appStore.activities.addError(result.error)
       }
     } catch (error) {
-      this.#appStore.activities.addError(String(error))
+      await this.#appStore.activities.addError(String(error))
     } finally {
-      this.#appStore.hideOverlay()
+      this.#isSearching = false
     }
   }
 

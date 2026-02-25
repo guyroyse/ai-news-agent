@@ -7,8 +7,13 @@
 
   let { activity }: Props = $props()
 
-  function formatDateTime(date: Date): string {
-    return date.toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
+  function formatDateTime(isoString: string): string {
+    return new Date(isoString).toLocaleString([], {
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit'
+    })
   }
 </script>
 

@@ -8,9 +8,18 @@
     placeholder?: string
     title?: string
     clazz?: string
+    disabled?: boolean
   }
 
-  let { value = $bindable(), validate, align = 'left', placeholder, title, clazz = '' }: Props = $props()
+  let {
+    value = $bindable(),
+    validate,
+    align = 'left',
+    placeholder,
+    title,
+    clazz = '',
+    disabled = false
+  }: Props = $props()
 
   function handleInput(event: Event) {
     const input = event.target as HTMLInputElement
@@ -29,8 +38,16 @@
   }
 
   const baseClasses =
-    'px-2 py-1 text-sm rounded bg-redis-midnight text-redis-white placeholder-redis-black-50 border border-redis-dusk-90 focus:outline-none focus:ring-1 focus:ring-redis-hyper'
+    'px-2 py-1 text-sm rounded bg-redis-midnight text-redis-white placeholder-redis-black-50 border border-redis-dusk-90 focus:outline-none focus:ring-1 focus:ring-redis-hyper disabled:opacity-50'
   const alignClass = $derived(alignClasses[align])
 </script>
 
-<input type="text" {value} oninput={handleInput} {placeholder} {title} class="{baseClasses} {alignClass} {clazz}" />
+<input
+  type="text"
+  {value}
+  oninput={handleInput}
+  {placeholder}
+  {title}
+  {disabled}
+  class="{baseClasses} {alignClass} {clazz}"
+/>

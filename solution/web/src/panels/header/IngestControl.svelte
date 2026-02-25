@@ -14,23 +14,24 @@
   }
 
   async function handleIngest() {
+    if (appStore.isIngesting) return
     const limit = ingestCount ? Number(ingestCount) : undefined
     ingestCount = ''
 
-    appStore.showOverlay()
+    appStore.isIngesting = true
 
     try {
       const result = await ingestArticles(limit)
       if (result.success) {
-        appStore.activities.addIngest(result.found, result.processed, result.articles)
+        await appStore.activities.addIngest(result.found, result.processed, result.articles)
         await Promise.all([appStore.sources.refresh(), appStore.tags.refresh()])
       } else {
-        appStore.activities.addError(result.error)
+        await appStore.activities.addError(result.error)
       }
     } catch (error) {
-      appStore.activities.addError(String(error))
+      await appStore.activities.addError(String(error))
     } finally {
-      appStore.hideOverlay()
+      appStore.isIngesting = false
     }
   }
 </script>
@@ -43,6 +44,13 @@
     align="center"
     title="Maximum number of articles to ingest"
     clazz="w-14"
+    disabled={appStore.isIngesting}
   />
-  <PrimaryButton icon="fa-solid fa-download" label="Ingest" title="Ingest articles" onclick={handleIngest} />
+  <PrimaryButton
+    icon={appStore.isIngesting ? 'fa-solid fa-spinner fa-spin' : 'fa-solid fa-download'}
+    label="Ingest"
+    title="Ingest articles"
+    onclick={handleIngest}
+    disabled={appStore.isIngesting}
+  />
 </div>

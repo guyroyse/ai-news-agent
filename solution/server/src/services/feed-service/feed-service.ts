@@ -99,4 +99,3 @@ async function fetchItemHtml(url: string): Promise<string | undefined> {
   }
   return undefined
 }
-

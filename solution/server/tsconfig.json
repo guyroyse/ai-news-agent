@@ -15,7 +15,7 @@
       "@root/*": ["./*"],
       "@adapters": ["./adapters/index.ts"],
       "@services": ["./services/index.ts"],
-      "@ingestion": ["./ingestion/index.ts"]
+      "@workflows": ["./workflows/index.ts"]
     }
   },
   "include": ["src/**/*"],

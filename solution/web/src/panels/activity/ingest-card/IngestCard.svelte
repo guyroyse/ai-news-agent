@@ -9,8 +9,13 @@
 
   let { activity }: Props = $props()
 
-  function formatDateTime(date: Date): string {
-    return date.toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
+  function formatDateTime(isoString: string): string {
+    return new Date(isoString).toLocaleString([], {
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit'
+    })
   }
 
   function groupBySource(articles: ArticleSummary[]): Map<string, ArticleSummary[]> {
@@ -28,7 +33,7 @@
 <article class="bg-redis-dusk rounded-lg overflow-hidden">
   <header class="flex items-center justify-between px-4 py-3 bg-redis-dusk-90">
     <div class="flex items-center gap-2">
-      <i class="fa-solid fa-download text-redis-violet"></i>
+      <i class="fa-solid fa-download text-redis-white"></i>
       <span class="font-medium text-redis-white">
         Ingested {activity.processed} of {activity.found} articles
       </span>

@@ -16,8 +16,10 @@
     appStore.search.clear()
   }
 
+  const isSearching = $derived(appStore.search.isSearching)
+
   const searchButtonClasses =
-    'flex-1 px-3 py-2 text-sm font-medium rounded bg-redis-hyper text-white hover:bg-redis-deep-hyper focus:outline-none focus:ring-2 focus:ring-redis-hyper focus:ring-offset-2 focus:ring-offset-redis-dusk cursor-pointer'
+    'flex-1 px-3 py-2 text-sm font-medium rounded bg-redis-hyper text-white hover:bg-redis-deep-hyper focus:outline-none focus:ring-2 focus:ring-redis-hyper focus:ring-offset-2 focus:ring-offset-redis-dusk cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
 
   const clearButtonClasses =
     'px-3 py-2 text-sm font-medium rounded bg-redis-dusk-90 text-white hover:bg-redis-dusk-70 focus:outline-none focus:ring-2 focus:ring-redis-dusk-70 focus:ring-offset-2 focus:ring-offset-redis-dusk cursor-pointer'
@@ -44,8 +46,8 @@
   </div>
 
   <div class="flex gap-2 mt-8">
-    <button type="button" onclick={handleSearch} class={searchButtonClasses}>
-      <i class="fa-solid fa-magnifying-glass mr-2"></i>
+    <button type="button" onclick={handleSearch} class={searchButtonClasses} disabled={isSearching}>
+      <i class={isSearching ? 'fa-solid fa-spinner fa-spin mr-2' : 'fa-solid fa-magnifying-glass mr-2'}></i>
       Search
     </button>
     <button type="button" onclick={handleClear} class={clearButtonClasses} title="Clear all filters">

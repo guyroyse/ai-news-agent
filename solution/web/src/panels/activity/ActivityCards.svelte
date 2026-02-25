@@ -4,6 +4,7 @@
   import ErrorCard from './ErrorCard.svelte'
   import ArticleCard from './article-card/ArticleCard.svelte'
   import NoArticlesFoundCard from './article-card/NoArticlesFoundCard.svelte'
+  import BriefCard from './brief-card/BriefCard.svelte'
 
   const appStore = AppStore.instance
 </script>
@@ -18,6 +19,8 @@
       <ArticleCard {activity} />
     {:else if activity.type === 'no-articles-found'}
       <NoArticlesFoundCard {activity} />
+    {:else if activity.type === 'brief'}
+      <BriefCard {activity} />
     {/if}
   {/each}
 </div>

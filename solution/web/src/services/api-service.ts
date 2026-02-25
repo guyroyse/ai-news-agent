@@ -7,7 +7,17 @@ import type {
   OrganizationsResponse,
   LocationsResponse,
   SearchCriteria,
-  SearchResponse
+  SearchResponse,
+  ChatRequest,
+  ChatResponse,
+  BriefRequest,
+  BriefResponse,
+  Activity,
+  ActivitiesResponse,
+  ActivityResponse,
+  ClearActivitiesResponse,
+  ChatHistoryResponse,
+  ClearChatHistoryResponse
 } from './api-types'
 
 export * from './api-types'
@@ -55,6 +65,57 @@ export async function searchArticles(criteria: SearchCriteria, limit: number = 5
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(criteria)
+  })
+  return response.json()
+}
+
+export async function sendChatMessage(request: ChatRequest): Promise<ChatResponse> {
+  const response = await fetch(`${API_BASE}/chat`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(request)
+  })
+  return response.json()
+}
+
+export async function fetchBrief(request: BriefRequest): Promise<BriefResponse> {
+  const response = await fetch(`${API_BASE}/brief`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(request)
+  })
+  return response.json()
+}
+
+export async function fetchActivities(): Promise<ActivitiesResponse> {
+  const response = await fetch(`${API_BASE}/activities`)
+  return response.json()
+}
+
+export async function addActivity(activity: Activity): Promise<ActivityResponse> {
+  const response = await fetch(`${API_BASE}/activities`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ activity })
+  })
+  return response.json()
+}
+
+export async function clearActivities(): Promise<ClearActivitiesResponse> {
+  const response = await fetch(`${API_BASE}/activities`, {
+    method: 'DELETE'
+  })
+  return response.json()
+}
+
+export async function fetchChatHistory(sessionId: string): Promise<ChatHistoryResponse> {
+  const response = await fetch(`${API_BASE}/chat/history?sessionId=${encodeURIComponent(sessionId)}`)
+  return response.json()
+}
+
+export async function clearChatHistory(sessionId: string): Promise<ClearChatHistoryResponse> {
+  const response = await fetch(`${API_BASE}/chat/history?sessionId=${encodeURIComponent(sessionId)}`, {
+    method: 'DELETE'
   })
   return response.json()
 }

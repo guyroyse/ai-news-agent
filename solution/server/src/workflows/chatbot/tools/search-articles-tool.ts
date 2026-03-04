@@ -1,5 +1,6 @@
 import { tool } from '@langchain/core/tools'
 import { z } from 'zod'
+import dedent from 'dedent'
 
 import { searchArticles as searchArticlesService } from '@services'
 
@@ -37,19 +38,23 @@ export const searchArticlesTool = tool(
 
     const result = await searchArticlesService(criteria, limit ?? 5)
 
-    if (!result.success) {
-      return JSON.stringify({ error: result.error, articles: [] })
+    if (result.success) {
+      // Transform articles to reduce context size and prevent LLM from using actual URLs
+      const articles = result.articles.map(({ content, link, ...rest }) => rest)
+      return JSON.stringify({ articles })
     }
 
-    return JSON.stringify({ articles: result.articles })
+    return JSON.stringify({ error: result.error, articles: [] })
   },
   {
     name: 'search_articles',
-    description:
-      'Search the news article database. Use semantic search for natural language queries, ' +
-      'or filter by topics, people, organizations, locations, sources, and date range. ' +
-      'Returns a list of matching articles with their content, summaries, and metadata.',
+    description: dedent`
+      Search the news article database. Use semantic search for natural
+      language queries, or filter by topics, people, organizations, locations,
+      sources, and date range. Returns articles with id, title, summary, source,
+      publicationDate, topics, and namedEntities (people, organizations, locations).
+      Construct relative URLs using the article id: [Article Title](/article/{id}).
+      Do not use http:// or https:// URLs.`,
     schema: searchArticlesSchema
   }
 )
-

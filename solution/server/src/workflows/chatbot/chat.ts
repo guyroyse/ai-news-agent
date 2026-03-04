@@ -11,8 +11,6 @@ export async function chat(request: ChatRequest): Promise<ChatResponse> {
   })
 
   return {
-    sessionId,
-    response: result.response,
-    articles: result.articles.length > 0 ? result.articles : undefined
+    response: result.responseMessage
   }
 }

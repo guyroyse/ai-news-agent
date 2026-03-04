@@ -22,7 +22,7 @@ export const ArticleAnnotation = Annotation.Root({
     reducer: (prev, next) => [...prev, ...next]
   }),
   embedding: Annotation<number[]>(),
-  article: Annotation<Article>()
+  article: Annotation<Omit<Article, 'id'>>()
 })
 
 export type ArticleState = typeof ArticleAnnotation.State

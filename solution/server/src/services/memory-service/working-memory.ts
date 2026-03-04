@@ -1,8 +1,8 @@
 import { config } from '@root/config.js'
 import { log } from '../logger-service/index.js'
-import type { MemoryMessage, UpdateWorkingMemoryRequest, WorkingMemoryResponse } from './types.js'
+import type { UpdateWorkingMemoryRequest, WorkingMemoryResponse } from './types.js'
 
-const AMS_BASE_URL = config.amsUrl ?? 'http://localhost:8100'
+const AMS_BASE_URL = config.amsUrl
 
 /*==========================================================================
  * Fetch working memory for a session
@@ -29,7 +29,10 @@ export async function fetchWorkingMemory(sessionId: string): Promise<WorkingMemo
 /*==========================================================================
  * Update working memory for a session
  +=========================================================================*/
-export async function updateWorkingMemory(sessionId: string, payload: UpdateWorkingMemoryRequest): Promise<WorkingMemoryResponse> {
+export async function updateWorkingMemory(
+  sessionId: string,
+  payload: UpdateWorkingMemoryRequest
+): Promise<WorkingMemoryResponse> {
   try {
     const response = await fetch(`${AMS_BASE_URL}/v1/working-memory/${sessionId}`, {
       method: 'PUT',
@@ -72,15 +75,3 @@ export async function clearWorkingMemory(sessionId: string): Promise<void> {
     throw error
   }
 }
-
-/*==========================================================================
- * Helper to convert messages from LangChain format
- +=========================================================================*/
-export function toMemoryMessages(messages: Array<{ role: string; content: string }>): MemoryMessage[] {
-  return messages.map(msg => ({
-    role: msg.role as 'user' | 'assistant' | 'system',
-    content: msg.content,
-    created_at: new Date().toISOString()
-  }))
-}
-

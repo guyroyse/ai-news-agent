@@ -7,22 +7,18 @@ import { briefWorkflow } from './workflow.js'
  * Generate a personalized news brief
  +=========================================================================*/
 export async function brief(request: BriefRequest): Promise<BriefResult> {
-  const { sessionId, period } = request
+  const { period } = request
 
-  log('Brief Workflow', `🗞️ Generating ${period} brief for session ${sessionId}`)
+  log('Brief Workflow', `🗞️ Generating ${period} brief`)
 
-  const result = await briefWorkflow.invoke({
-    sessionId,
-    period
-  })
+  const result = await briefWorkflow.invoke({ period })
 
-  log('Brief Workflow', `✅ Generated brief with ${result.articleCount} articles`)
+  const articleCount = result.articles.length
+
+  log('Brief Workflow', `✅ Generated brief with ${articleCount} articles`)
 
   return {
-    sessionId,
-    period,
     brief: result.brief,
-    articleCount: result.articleCount
+    articleCount
   }
 }
-

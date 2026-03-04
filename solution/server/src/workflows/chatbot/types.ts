@@ -1,5 +1,3 @@
-import type { SearchedArticle } from '@services'
-
 /*==========================================================================
  * Types for chatbot workflow
  +=========================================================================*/
@@ -12,8 +10,5 @@ export type ChatRequest = {
 
 /* Response from chat endpoint */
 export type ChatResponse = {
-  sessionId: string
   response: string
-  articles?: SearchedArticle[] // Articles to display in activity panel
 }
-

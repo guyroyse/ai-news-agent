@@ -21,14 +21,49 @@ export async function articleExists(link: string): Promise<boolean> {
   return exists === 1
 }
 
-export async function saveArticle(article: Article): Promise<void> {
-  const key = generateArticleKey(article.link)
-  await redis.json.set(key, '$', article as any)
+export async function saveArticle(article: Omit<Article, 'id'>): Promise<void> {
+  const id = generateArticleId(article.link)
+  const key = `${KEY_PREFIX}${id}`
+  await redis.json.set(key, '$', { id, ...article } as any)
+}
+
+export async function fetchArticleById(id: string): Promise<import('./types.js').ArticleResponse> {
+  try {
+    const key = `${KEY_PREFIX}${id}`
+    const doc = (await redis.json.get(key)) as any
+
+    if (!doc) {
+      return { success: false, error: 'not_found' }
+    }
+
+    const article = {
+      id: doc.id ?? '',
+      title: doc.title ?? '',
+      link: doc.link ?? '',
+      content: doc.content ?? '',
+      summary: doc.summary ?? '',
+      source: doc.source?.title ?? '',
+      publicationDate: doc.publicationDate ?? 0,
+      topics: doc.topics ?? [],
+      namedEntities: {
+        people: doc.namedEntities?.people ?? [],
+        organizations: doc.namedEntities?.organizations ?? [],
+        locations: doc.namedEntities?.locations ?? []
+      }
+    }
+
+    return { success: true, article }
+  } catch (error) {
+    return { success: false, error: String(error) }
+  }
+}
+
+function generateArticleId(link: string): string {
+  return createHash('sha1').update(link).digest('hex').substring(0, 16)
 }
 
 function generateArticleKey(link: string): string {
-  const hash = createHash('sha1').update(link).digest('hex').substring(0, 16)
-  return `${KEY_PREFIX}${hash}`
+  return `${KEY_PREFIX}${generateArticleId(link)}`
 }
 
 /*==========================================================================
@@ -158,9 +193,11 @@ export async function searchArticles(criteria: SearchCriteria, limit: number = 5
 
     // Map results to SearchedArticle
     const articles = result.documents.map((doc: any) => ({
+      id: doc.value.id ?? '',
       title: doc.value.title ?? '',
       link: doc.value.link ?? '',
       content: doc.value.content ?? '',
+      summary: doc.value.summary ?? '',
       source: doc.value.source?.title ?? '',
       publicationDate: doc.value.publicationDate ?? 0,
       topics: doc.value.topics ?? [],

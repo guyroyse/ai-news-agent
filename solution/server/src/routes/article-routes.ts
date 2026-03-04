@@ -1,7 +1,7 @@
 import { Router } from 'express'
 
 import { ingest } from '@workflows'
-import { fetchAllSources, searchArticles } from '@services'
+import { fetchAllSources, fetchArticleById, searchArticles } from '@services'
 
 const router = Router()
 
@@ -44,5 +44,21 @@ router.post('/search', async (req, res) => {
   }
 })
 
-export default router
+/* Must be last - /:id is a catch-all that would match /sources, /search, etc. */
+router.get('/:id', async (req, res) => {
+  try {
+    const { id } = req.params
+    const result = await fetchArticleById(id)
 
+    if (!result.success && result.error === 'not_found') {
+      res.status(404).json(result)
+      return
+    }
+
+    res.json(result)
+  } catch (error) {
+    res.status(500).json({ success: false, error: String(error) })
+  }
+})
+
+export default router

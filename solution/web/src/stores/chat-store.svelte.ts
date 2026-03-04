@@ -50,11 +50,6 @@ export default class ChatStore {
       if (result.success) {
         // Add assistant response to chat
         this.#messages = [...this.#messages, { role: 'assistant', content: result.response }]
-
-        // If articles were returned, add them to the activity panel
-        if (result.articles && result.articles.length > 0) {
-          await this.#appStore.activities.addChatArticles(result.articles)
-        }
       } else {
         // Add error as assistant message
         this.#messages = [...this.#messages, { role: 'assistant', content: `Error: ${result.error}` }]

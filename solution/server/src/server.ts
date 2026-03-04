@@ -2,7 +2,7 @@ import cors from 'cors'
 import express from 'express'
 
 import { config } from './config.js'
-import { systemRoutes, articleRoutes, tagRoutes, chatRoutes, briefRoutes, activityRoutes } from './routes/index.js'
+import { articleRoutes, tagRoutes, chatRoutes, briefRoutes, activityRoutes } from './routes/index.js'
 
 const port = config.port
 
@@ -10,9 +10,16 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-app.use('/api', systemRoutes)
-app.use('/api', articleRoutes)
-app.use('/api', tagRoutes)
+app.get('/api/version', (_req, res) => {
+  res.json({
+    name: 'News Agent API',
+    version: '1.0.0',
+    node: process.version
+  })
+})
+
+app.use('/api/articles', articleRoutes)
+app.use('/api/tags', tagRoutes)
 app.use('/api/chat', chatRoutes)
 app.use('/api/brief', briefRoutes)
 app.use('/api/activities', activityRoutes)

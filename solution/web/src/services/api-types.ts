@@ -78,6 +78,7 @@ export type SearchCriteria = {
 }
 
 export type SearchedArticle = {
+  id: string
   title: string
   link: string
   content: string
@@ -98,6 +99,18 @@ export type SearchResult = {
 
 export type SearchResponse = SearchResult | ApiError
 
+export type ArticleResult = {
+  success: true
+  article: SearchedArticle
+}
+
+export type ArticleNotFound = {
+  success: false
+  error: 'not_found'
+}
+
+export type ArticleResponse = ArticleResult | ArticleNotFound | ApiError
+
 /*==========================================================================
  * Chat types
  +=========================================================================*/
@@ -114,9 +127,7 @@ export type ChatRequest = {
 
 export type ChatResult = {
   success: true
-  sessionId: string
   response: string
-  articles?: SearchedArticle[]
 }
 
 export type ChatResponse = ChatResult | ApiError
@@ -128,14 +139,11 @@ export type ChatResponse = ChatResult | ApiError
 export type BriefPeriod = 'daily' | 'weekly' | 'monthly'
 
 export type BriefRequest = {
-  sessionId: string
   period: BriefPeriod
 }
 
 export type BriefResult = {
   success: true
-  sessionId: string
-  period: BriefPeriod
   brief: string
   articleCount: number
 }

@@ -12,6 +12,7 @@ export type NamedEntities = {
 }
 
 export type Article = {
+  id: string
   title: string
   link: string
   publicationDate: number
@@ -35,9 +36,11 @@ export type SearchCriteria = {
 }
 
 export type SearchedArticle = {
+  id: string
   title: string
   link: string
   content: string
+  summary: string
   source: string
   publicationDate: number
   topics: string[]
@@ -59,3 +62,15 @@ export type SearchError = {
 }
 
 export type SearchResponse = SearchResult | SearchError
+
+export type ArticleResult = {
+  success: true
+  article: SearchedArticle
+}
+
+export type ArticleNotFound = {
+  success: false
+  error: 'not_found'
+}
+
+export type ArticleResponse = ArticleResult | ArticleNotFound | SearchError

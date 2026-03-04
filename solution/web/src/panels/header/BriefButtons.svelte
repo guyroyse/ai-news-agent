@@ -12,13 +12,10 @@
 
     loadingPeriod = period
     try {
-      const result = await fetchBrief({
-        sessionId: appStore.chat.sessionId,
-        period
-      })
+      const result = await fetchBrief({ period })
 
       if (result.success) {
-        await appStore.activities.addBrief(result.period, result.brief, result.articleCount)
+        await appStore.activities.addBrief(period, result.brief, result.articleCount)
       } else {
         await appStore.activities.addError(result.error)
       }

@@ -2,21 +2,14 @@
  * Types for Agent Memory Server REST API
  +=========================================================================*/
 
-/* Message content can be string or structured object */
-export type MemoryMessageContent = string | { type: string; text: string; annotations?: unknown }
-
 /* Message in a conversation */
 export type MemoryMessage = {
-  id?: string
   role: 'user' | 'assistant' | 'system'
-  content: MemoryMessageContent
-  created_at?: string
-}
-
-/* Helper to extract text content from a memory message */
-export function getMessageText(content: MemoryMessageContent): string {
-  if (typeof content === 'string') return content
-  return content.text
+  content:
+    | string
+    | {
+        text: string
+      }
 }
 
 /* Working memory for a session */
@@ -40,18 +33,15 @@ export type UpdateWorkingMemoryRequest = {
 /* Request for memory prompt hydration */
 export type MemoryPromptRequest = {
   query: string
-  session?: {
+  session: {
     session_id: string
     namespace?: string | null
     user_id?: string | null
-  } | null
-  long_term_search?:
-    | {
-        text?: string
-        limit?: number
-      }
-    | boolean
-    | null
+  }
+  long_term_search?: {
+    text: string
+    limit: number
+  }
 }
 
 /* Response from memory prompt endpoint */

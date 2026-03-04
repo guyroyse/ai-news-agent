@@ -1,73 +1,86 @@
 import dedent from 'dedent'
 
 import { fetchLLM } from '@adapters'
+import type { SearchedArticle, LongTermMemory } from '@services'
 
+import type { BriefPeriod } from '../types.js'
 import type { BriefState } from '../state.js'
 
-/*==========================================================================
- * Generates a personalized news brief using the LLM
- +=========================================================================*/
 export async function briefGenerator(state: BriefState): Promise<Partial<BriefState>> {
   const { period, articles, memories } = state
 
-  // If no articles, return a simple message
-  if (articles.length === 0) {
-    return {
-      brief: `No news articles found for the ${period} period.`
-    }
-  }
+  /* If no articles found, return a brief message */
+  if (articles.length === 0) return { brief: `No news articles found for the ${period} period.` }
 
-  // Build context from user memories
-  const memoryContext =
-    memories.length > 0
-      ? dedent`
-        ## User Interests and Preferences
-        Based on previous conversations, the user is interested in:
-        ${memories.map(m => `- ${m.text}`).join('\n')}
+  /* Build the prompt */
+  const prompt = buildPrompt(period, articles, memories)
 
-        Prioritize news that relates to these interests.
-      `
-      : ''
+  /* Generate the brief */
+  const llm = fetchLLM()
+  const response = await llm.invoke(prompt)
+  const brief = response.content as string
 
-  // Build articles context
-  const articlesContext = articles
-    .map(
-      a => dedent`
-      ### ${a.title}
-      - Source: ${a.source}
-      - Topics: ${a.topics.join(', ')}
-      - People: ${a.namedEntities.people.join(', ') || 'None'}
-      - Organizations: ${a.namedEntities.organizations.join(', ') || 'None'}
-      - Summary: ${a.content.slice(0, 500)}...
-    `
-    )
-    .join('\n\n')
+  /* Return the brief */
+  return { brief }
+}
 
-  const periodLabel = period === 'daily' ? 'last 24 hours' : period === 'weekly' ? 'last week' : 'last month'
+function buildPrompt(period: BriefPeriod, articles: SearchedArticle[], memories: LongTermMemory[]): string {
+  return dedent`
+    You are a personalized news briefing assistant. Generate a concise,
+    engaging news brief based on the following articles from the
+    ${buildPeriodLabel(period)}.
 
-  const prompt = dedent`
-    You are a personalized news briefing assistant. Generate a concise, engaging news brief
-    based on the following articles from the ${periodLabel}.
-
-    ${memoryContext}
+    ${buildMemoryContext(memories)}
 
     ## Available Articles (${articles.length} total)
-    ${articlesContext}
+    ${buildArticlesContext(articles)}
 
     ## Instructions
     - Create a brief summary highlighting the most important and relevant news
     - If user interests are provided, prioritize stories that match those interests
-    - Group related stories together
     - Be concise but informative
+    - Don't list articles, summarize what has happened
     - Use markdown formatting with headers and bullet points
-    - Don't include all articles - focus on the most significant ones
     - Maximum 500 words
   `
-
-  const llm = fetchLLM()
-  const response = await llm.invoke(prompt)
-  const brief = typeof response.content === 'string' ? response.content : JSON.stringify(response.content)
-
-  return { brief }
 }
 
+function buildMemoryContext(memories: LongTermMemory[]): string {
+  if (memories.length === 0) return ''
+
+  return dedent`
+    ## User Interests and Preferences
+    Based on previous conversations, the user is interested in:
+    ${memories.map(m => `- ${m.text}`).join('\n')}
+
+    Prioritize news that relates to these interests.
+  `
+}
+
+function buildArticlesContext(articles: SearchedArticle[]): string {
+  return articles.map(a => buildArticle(a)).join('\n\n')
+}
+
+function buildArticle(article: SearchedArticle): string {
+  return dedent`
+    ### ${article.title}
+    - Source: ${article.source}
+    - Topics: ${article.topics.join(', ')}
+    - People: ${article.namedEntities.people.join(', ') || 'None'}
+    - Organizations: ${article.namedEntities.organizations.join(', ') || 'None'}
+    - Summary: ${article.summary}
+  `
+}
+
+function buildPeriodLabel(period: BriefPeriod): string {
+  switch (period) {
+    case 'daily':
+      return 'last 24 hours'
+    case 'weekly':
+      return 'last week'
+    case 'monthly':
+      return 'last month'
+    default:
+      return 'last 24 hours'
+  }
+}

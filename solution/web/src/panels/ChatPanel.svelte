@@ -1,6 +1,7 @@
 <script lang="ts">
   import { marked } from 'marked'
   import AppStore from '@stores/app-store.svelte'
+  import { fetchArticle } from '@services/api-service'
 
   const app = AppStore.instance
   const chat = app.chat
@@ -25,6 +26,23 @@
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault()
       chat.sendMessage()
+    }
+  }
+
+  async function handleArticleClick(event: MouseEvent): Promise<void> {
+    const target = event.target as HTMLElement
+    if (target.tagName === 'A') {
+      const href = target.getAttribute('href')
+      if (href?.startsWith('/article/')) {
+        event.preventDefault()
+        const id = href.replace('/article/', '')
+        const result = await fetchArticle(id)
+        if (result.success) {
+          await app.activities.addChatArticles([result.article])
+        } else {
+          await app.activities.addError(`Article not found: ${id}`)
+        }
+      }
     }
   }
 
@@ -58,7 +76,11 @@
               {message.content}
             </div>
           {:else}
+            <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
             <div
+              onclick={handleArticleClick}
+              onkeydown={e => e.key === 'Enter' && handleArticleClick(e as unknown as MouseEvent)}
+              role="article"
               class="max-w-[85%] rounded-lg px-3 py-2 text-sm bg-redis-midnight text-redis-dusk-30 prose prose-sm prose-invert prose-p:my-1 prose-ul:my-1 prose-li:my-0"
             >
               {@html renderMarkdown(message.content)}

@@ -19,8 +19,8 @@ export async function articleAssembler(state: ArticleState): Promise<Partial<Art
   if (!locations) throw new Error('No locations to assemble')
   if (!embedding || embedding.length === 0) throw new Error('No embedding to assemble')
 
-  /* Assemble the final article */
-  const article: Article = {
+  /* Assemble the final article (id is generated on save) */
+  const article: Omit<Article, 'id'> = {
     title: feedItem.title,
     link: feedItem.link,
     publicationDate: Math.floor(new Date(feedItem.pubDate).getTime() / 1000),

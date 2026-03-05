@@ -8,11 +8,11 @@ class Config {
   }
 
   get redisUrl(): string {
-    return process.env.REDIS_URL || 'redis://localhost:6379'
+    return process.env.REDIS_URL ?? 'redis://localhost:6379'
   }
 
   get openAiApiKey(): string {
-    return process.env.OPENAI_API_KEY || ''
+    return process.env.OPENAI_API_KEY ?? ''
   }
 
   get port(): number {
@@ -20,7 +20,7 @@ class Config {
   }
 
   get amsUrl(): string {
-    return process.env.AMS_URL || 'http://localhost:8000'
+    return process.env.AMS_URL ?? 'http://localhost:8000'
   }
 }
 

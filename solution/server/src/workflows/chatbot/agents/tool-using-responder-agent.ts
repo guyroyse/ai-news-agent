@@ -3,7 +3,7 @@ import { createReactAgent } from '@langchain/langgraph/prebuilt'
 import { SystemMessage } from '@langchain/core/messages'
 import dedent from 'dedent'
 
-import { fetchLLM } from '@adapters'
+import { fetchLargeLLM } from '@adapters'
 
 import { searchArticlesTool } from '../tools/index.js'
 import type { ChatState } from '../state.js'
@@ -40,7 +40,7 @@ const SYSTEM_PROMPT = dedent`
  * Create the prebuilt ReAct agent with tools
  +=========================================================================*/
 const tools = [searchArticlesTool]
-const llm = fetchLLM()
+const llm = fetchLargeLLM()
 
 const reactAgent = createReactAgent({
   llm,

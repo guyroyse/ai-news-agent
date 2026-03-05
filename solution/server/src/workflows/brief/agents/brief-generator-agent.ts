@@ -1,6 +1,6 @@
 import dedent from 'dedent'
 
-import { fetchLLM } from '@adapters'
+import { fetchLargeLLM } from '@adapters'
 import type { SearchedArticle, LongTermMemory } from '@services'
 
 import type { BriefPeriod } from '../types.js'
@@ -16,7 +16,7 @@ export async function briefGenerator(state: BriefState): Promise<Partial<BriefSt
   const prompt = buildPrompt(period, articles, memories)
 
   /* Generate the brief */
-  const llm = fetchLLM()
+  const llm = fetchLargeLLM()
   const response = await llm.invoke(prompt)
   const brief = response.content as string
 

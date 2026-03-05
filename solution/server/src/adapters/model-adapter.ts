@@ -27,7 +27,7 @@ export function fetchLargeLLM(): ChatOpenAI {
   if (!largeLLMInstance)
     largeLLMInstance = new ChatOpenAI({
       modelName: LARGE_MODEL_NAME,
-      temperature: 0.3,
+      temperature: 0.7,
       apiKey: config.openAiApiKey
     })
   return largeLLMInstance

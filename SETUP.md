@@ -20,10 +20,6 @@ cp .env.sample .env
 
 2. **Edit the .env file and add your OpenAI API key:**
 
-```bash
-nano .env
-```
-
 If you have any issues with the ports, you can change them in the .env file too. The defaults are fine for most cases.
 
 3. **Start everything:**
